@@ -171,31 +171,7 @@
     link.hidden = false;
     document.getElementById(disabledId).hidden = true;
   }
-  const ticketUrl = externalUrl(config.tickets?.platformUrl);
-  activateLink("ticket-buy", "ticket-unavailable", ticketUrl);
-  if (ticketUrl) {
-    document.getElementById("ticket-status").textContent = "TICKETS AVAILABLE";
-    document.getElementById("event-ticket-status").textContent = "AVAILABLE";
-    document.getElementById("ticket-message").textContent =
-      "Билеты доступны на билетной платформе. Покупка откроется в новой вкладке.";
-    const categories = document.getElementById("ticket-categories");
-    const entries = Array.isArray(config.tickets?.categories) ? config.tickets.categories : [];
-    entries.forEach((category) => {
-      if (!category || typeof category.name !== "string" || !category.name.trim()) return;
-      const row = document.createElement("div");
-      row.className = "ticket-category";
-      const name = document.createElement("span");
-      name.textContent = category.name;
-      row.appendChild(name);
-      if (typeof category.priceLabel === "string" && category.priceLabel.trim()) {
-        const price = document.createElement("span");
-        price.textContent = category.priceLabel;
-        row.appendChild(price);
-      }
-      categories.appendChild(row);
-    });
-    categories.hidden = !categories.children.length;
-  }
+  window.PARLADOR_TICKETING.mount(config.tickets || {});
   const telegramUrl = externalUrl(config.community?.telegramUrl, true);
   activateLink("telegram-join", "telegram-unavailable", telegramUrl);
   if (telegramUrl) document.getElementById("telegram-message").textContent =
@@ -243,4 +219,5 @@
     );
   }
 })();
+
 

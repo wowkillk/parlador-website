@@ -28,6 +28,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="site-config.js" defer></script>
+    <script src="ticket-pricing.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -299,13 +300,21 @@
             <p class="eyebrow section-label">04 <span class="slash">/</span> ACCESS THE NIGHT</p>
             <h2 id="tickets-title">TICKETS<span class="dot" aria-hidden="true"></span></h2>
           </div>
-          <div class="ticket-panel">
-            <p class="eyebrow phase-status" id="ticket-status" role="status">COMING SOON</p>
-            <p class="phase-copy" id="ticket-message">Продажа билетов пока не открыта. Информация о категориях и стоимости появится здесь.</p>
-            <div class="ticket-categories" id="ticket-categories" hidden></div>
+          <div class="ticket-panel pricing-card">
+            <p class="eyebrow preview-notice" id="ticket-preview" hidden>LOCAL PREVIEW / ТЕСТОВОЕ ВРЕМЯ</p>
+            <div class="pricing-summary" aria-live="polite" aria-atomic="true">
+              <p class="eyebrow phase-status" id="ticket-status">COMING SOON</p>
+              <p class="ticket-price" id="ticket-price" hidden></p>
+              <p class="ticket-period" id="ticket-period">Все этапы — по московскому времени.</p>
+              <p class="ticket-next" id="ticket-next"></p>
+            </div>
+            <ol class="price-stages" id="price-stages" aria-label="Пять ценовых этапов"></ol>
+            <p class="phase-copy" id="ticket-message">Цены анонсированы. Билетная платформа пока не подключена.</p>
             <button class="button phase-button" id="ticket-unavailable" type="button" disabled aria-describedby="ticket-message">BUY TICKET <span aria-hidden="true">↗</span></button>
             <a class="button phase-button" id="ticket-buy" hidden>BUY TICKET <span aria-hidden="true">↗</span></a>
-            <p class="eyebrow phase-footnote">19.12.2026 / FABULA — MOSCOW</p>
+            <p class="pricing-disclaimer">Отображение зависит от часов вашего устройства. Окончательная стоимость и доступность билетов определяются билетной платформой.</p>
+            <noscript><p class="pricing-disclaimer">Включите JavaScript для актуального этапа и расписания цен. Цена покупки определяется билетной платформой.</p></noscript>
+            <p class="eyebrow phase-footnote">EUROPE/MOSCOW / 00:00 MSK</p>
           </div>
         </section>
         <section class="community section" id="community" aria-labelledby="community-title">
@@ -356,4 +365,5 @@
     >
   </body>
 </html>
+
 
