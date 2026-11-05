@@ -609,13 +609,9 @@ h2 {
   overflow-wrap: anywhere;
 }
 .artist-one h3 {
-  font-size: clamp(25px, 3.1vw, 46px);
-}
-.artist-name-long {
-  display: block;
+  font-size: clamp(14px, 2vw, 32px);
   white-space: nowrap;
-  transform: scaleX(0.78);
-  transform-origin: center;
+  overflow-wrap: normal;
 }
 .artist-card .cyrillic {
   font-family: Oswald, "Arial Narrow", Arial, sans-serif;
@@ -1102,7 +1098,7 @@ h2 {
     font-size: 2.6vw;
   }
   .artist-one h3 {
-    font-size: 3.1vw;
+    font-size: 2vw;
   }
   .manifesto-copy {
     padding-left: 26px;
@@ -1230,7 +1226,7 @@ h2 {
     font-size: 3.5vw;
   }
   .artist-one h3 {
-    font-size: 3.5vw;
+    font-size: 2.8vw;
   }
   .artist-card .cyrillic {
     font-size: 3.4vw;
@@ -1520,11 +1516,8 @@ h2 {
     letter-spacing: -0.06em;
   }
   .artist-one h3 {
-    font-size: clamp(20px, 5.5vw, 32px);
+    font-size: clamp(14px, 3.9vw, 25px);
     letter-spacing: -0.065em;
-  }
-  .artist-name-long {
-    transform: scaleX(0.73);
   }
   .artist-card .cyrillic {
     font-size: clamp(18px, 4.7vw, 28px);
@@ -1731,7 +1724,7 @@ h2 {
     left: 10px;
   }
   .artist-one h3 {
-    font-size: 20px;
+    font-size: 14px;
   }
   .countdown {
     gap: 7px;
@@ -1948,3 +1941,10 @@ h2 {
 }
 .ticket-slogan > span { white-space: nowrap; }
 .ticket-slogan > span:last-child { color: var(--red); }
+
+
+/* Fit the untransformed name to this card's content width, preserving its center. */
+@supports (container-type: inline-size) and (font-size: 1cqi) {
+  .artist-one { container-type: inline-size; }
+  .artist-one h3 { font-size: min(32px, 12.5cqi); }
+}
