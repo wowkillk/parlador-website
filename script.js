@@ -130,7 +130,7 @@
     previous.disabled = artists.scrollLeft <= 2;
     next.disabled =
       artists.scrollLeft + artists.clientWidth >= artists.scrollWidth - 2;
-    position.textContent = `${String(first).padStart(2, "0")} — ${String(Math.min(cards.length, first + visible - 1)).padStart(2, "0")} / 06`;
+    position.textContent = `${String(first).padStart(2, "0")} — ${String(Math.min(cards.length, first + visible - 1)).padStart(2, "0")} / ${String(cards.length).padStart(2, "0")}`;
   }
   function moveArtists(direction) {
     artists.scrollBy({
