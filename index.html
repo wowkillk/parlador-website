@@ -1,90 +1,350 @@
 <!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101010">
-  <meta name="description" content="PARLADOR — московский underground techno-проект. 19 декабря 2026, Fabula, Москва. 22:00–06:00.">
-  <title>PARLADOR — Underground Techno / Москва</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="preload" href="assets/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Перейти к содержимому</a>
-  <header class="site-header" id="top">
-    <a class="brand" href="#home" aria-label="PARLADOR — на главную">
-      <svg class="brand-symbol" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M4 34V6h18l12 12-12 12H12V14h7l7 7M4 34h8" stroke="currentColor" stroke-width="4" stroke-linejoin="miter"/></svg>
-      <span>PARLADOR<small>UNDERGROUND TECHNO</small></span>
-    </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation" aria-label="Открыть меню"><span class="menu-label">МЕНЮ</span><span class="menu-icon" aria-hidden="true"></span></button>
-    <nav class="navigation" id="navigation" aria-label="Основная навигация">
-      <a href="#lineup"><small>01</small> LINEUP</a>
-      <a href="#manifesto"><small>02</small> MANIFESTO</a>
-      <a href="#event"><small>03</small> EVENT</a>
-      <a class="nav-ticket" href="#tickets">TICKETS <span aria-hidden="true">↗</span></a>
-    </nav>
-  </header>
-
-  <main id="main">
-    <section class="hero" id="home" aria-labelledby="hero-title">
-      <div class="hero-scene" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <div class="hero-eyebrow mono"><span>MOSCOW. UNDERGROUND. TOGETHER.</span><span class="signal"><i></i> THE NIGHT IS CALLING</span></div>
-        <h1 id="hero-title">PARLADOR</h1>
-        <div class="hero-lower">
-          <div class="hero-event">
-            <p class="eyebrow">СЛЕДУЮЩАЯ НОЧЬ / NEXT RAVE</p>
-            <p class="hero-date"><time datetime="2026-12-19">19.12<span>2026</span></time></p>
-            <p class="hero-place">FABULA <span>МОСКВА / 22:00–06:00 МСК</span></p>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#050505" />
+    <meta
+      name="description"
+      content="PARLADOR. Moscow underground techno. 19 декабря 2026, Fabula, Москва, 22:00–06:00 МСК."
+    />
+    <title>PARLADOR — Moscow Underground Techno</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/archivo-black-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/warehouse.png"
+      as="image"
+      fetchpriority="high"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#hero-content">Перейти к содержимому</a>
+    <main id="main">
+      <div class="hero-shell" id="home">
+        <header class="header" role="banner">
+          <a class="wordmark" href="#home" aria-label="PARLADOR — главная"
+            >PARLADOR<span class="dot" aria-hidden="true"></span
+          ></a>
+          <nav class="desktop-nav" aria-label="Основная навигация">
+            <a href="#home" class="active" aria-current="location">HOME</a>
+            <a href="#lineup">LINEUP</a>
+            <a href="#manifesto">MANIFESTO</a>
+            <a href="#tickets">TICKETS</a>
+          </nav>
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-controls="menu-panel"
+            aria-expanded="false"
+            aria-label="Открыть меню"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <nav
+            class="menu-panel"
+            id="menu-panel"
+            aria-label="Меню разделов"
+            inert
+            hidden
+          >
+            <a href="#home"><span>00 /</span> HOME</a
+            ><a href="#lineup"><span>01 /</span> LINEUP</a
+            ><a href="#manifesto"><span>02 /</span> MANIFESTO</a
+            ><a href="#event"><span>03 /</span> EVENT</a
+            ><a href="#tickets"><span>04 /</span> TICKETS</a>
+            <p>19.12.2026<br />FABULA — MOSCOW</p>
+          </nav>
+        </header>
+        <section class="hero" id="hero-content" aria-labelledby="hero-title">
+          <p class="eyebrow hero-eyebrow">
+            MOSCOW / UNDERGROUND TECHNO <span class="slash">/</span>
+            <span class="red">19.12.2026</span>
+          </p>
+          <h1 id="hero-title" aria-label="PARLADOR">
+            <span aria-hidden="true">PARLA</span
+            ><span aria-hidden="true">DOR<span class="dot"></span></span>
+          </h1>
+          <p class="hero-tagline">THE UNDERGROUND IS CALLING.</p>
+          <div class="next-session">
+            <p class="eyebrow">NEXT SESSION</p>
+            <time datetime="2026-12-19T22:00:00+03:00">19.12.2026</time>
+            <p class="eyebrow">FABULA — MOSCOW</p>
           </div>
-          <div class="hero-action"><p>Только звук.<br>Только движение.<br>Только здесь и сейчас.</p><a class="button button-red" href="#tickets">ВОЙТИ В НОЧЬ <span aria-hidden="true">↗</span></a></div>
+          <a class="button enter-button" href="#event"
+            >ENTER
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 19 19 5M5 5h14v14" /></svg
+          ></a>
+        </section>
+      </div>
+
+      <div class="ticker" aria-label="RAW TECHNO /// NO COMPROMISE">
+        <div class="ticker-track" aria-hidden="true">
+          <span
+            >RAW TECHNO /// NO COMPROMISE /// PARLADOR /// MOSCOW /// 19
+            DECEMBER ///&nbsp;</span
+          ><span
+            >RAW TECHNO /// NO COMPROMISE /// PARLADOR /// MOSCOW /// 19
+            DECEMBER ///&nbsp;</span
+          >
         </div>
-        <div class="hero-bottom mono"><a href="#lineup"><span class="scroll-mark" aria-hidden="true">↓</span> ПОГРУЗИТЬСЯ</a><span>RAW SOUND. REAL CONNECTION.</span><span>19 DEC — 20 DEC / 2026</span></div>
       </div>
-    </section>
 
-    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>NO DISTRACTIONS</span><b>✳</b><span>JUST TECHNO</span><b>✳</b><span>PARLADOR</span><b>✳</b><span>MOSCOW UNDERGROUND</span><b>✳</b><span>NO DISTRACTIONS</span><b>✳</b><span>JUST TECHNO</span><b>✳</b><span>PARLADOR</span><b>✳</b><span>MOSCOW UNDERGROUND</span><b>✳</b></div></div>
+      <div class="content-sections">
+        <section
+          class="lineup section"
+          id="lineup"
+          aria-labelledby="lineup-title"
+        >
+          <div class="lineup-heading">
+            <div>
+              <p class="eyebrow section-label">
+                01 <span class="slash">/</span> THE ARTISTS
+              </p>
+              <h2 id="lineup-title">
+                THE<br />LINEUP<span class="dot" aria-hidden="true"></span>
+              </h2>
+            </div>
+            <div class="lineup-intro">
+              <p>Шесть артистов —<br />один танцпол.</p>
+              <div class="lineup-controls" aria-label="Прокрутка артистов">
+                <button
+                  id="artists-prev"
+                  type="button"
+                  aria-label="Предыдущие артисты"
+                  aria-controls="artist-list"
+                  disabled
+                >
+                  ←</button
+                ><span class="eyebrow" id="artists-position" aria-live="polite"
+                  >01 — 04 / 06</span
+                ><button
+                  id="artists-next"
+                  type="button"
+                  aria-label="Следующие артисты"
+                  aria-controls="artist-list"
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="artist-list"
+            id="artist-list"
+            role="region"
+            aria-label="Лайнап: шесть артистов, прокрутка по горизонтали"
+            tabindex="0"
+          >
+            <article
+              class="artist-card artist-one"
+              aria-label="Артист 1 из 6: DJ KALASHNIKOV"
+            >
+              <p class="eyebrow">ARTIST 001</p>
+              <h3>DJ<br /><span class="artist-name-long">KALASHNIKOV</span></h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+            <article
+              class="artist-card artist-two"
+              aria-label="Артист 2 из 6: DANJAMIN"
+            >
+              <p class="eyebrow">ARTIST 002</p>
+              <h3>DANJAMIN</h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+            <article
+              class="artist-card artist-three"
+              aria-label="Артист 3 из 6: M.E.G"
+            >
+              <p class="eyebrow">ARTIST 003</p>
+              <h3>M.E.G</h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+            <article
+              class="artist-card artist-four"
+              aria-label="Артист 4 из 6: FRDM"
+            >
+              <p class="eyebrow">ARTIST 004</p>
+              <h3>FRDM</h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+            <article
+              class="artist-card artist-five"
+              aria-label="Артист 5 из 6: ACID BOSS"
+            >
+              <p class="eyebrow">ARTIST 005</p>
+              <h3>ACID BOSS</h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+            <article
+              class="artist-card artist-six"
+              aria-label="Артист 6 из 6: Девиантный Диалект"
+            >
+              <p class="eyebrow">ARTIST 006</p>
+              <h3 class="cyrillic">Девиантный<br />Диалект</h3>
+              <p class="artist-caption">PARLADOR</p>
+            </article>
+          </div>
+        </section>
 
-    <section class="lineup section-wrap" id="lineup" aria-labelledby="lineup-title">
-      <div class="section-top reveal"><p class="eyebrow"><span class="red">[01]</span> ЛЮДИ ЗА ЗВУКОМ</p><p class="mono section-note">SIX NAMES. ONE FREQUENCY.</p></div>
-      <div class="lineup-layout">
-        <div class="section-intro reveal"><h2 id="lineup-title">LINE<span class="red">/</span>UP</h2><p>Шесть имён.<br>Одна частота.</p><svg class="frequency-mark" viewBox="0 0 180 160" fill="none" aria-hidden="true"><path d="M8 80h24l12-36 18 72 20-108 22 144 18-108 14 72 12-36h24" stroke="currentColor" stroke-width="3"/><circle cx="90" cy="80" r="66" stroke="currentColor" stroke-opacity=".3"/></svg><span class="mono intro-caption">SOUND WITHOUT COMPROMISE</span></div>
-        <ol class="artist-list">
-          <li class="reveal"><span class="artist-number">01</span><h3>DJ KALASHNIKOV</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-          <li class="reveal"><span class="artist-number">02</span><h3>DANJAMIN</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-          <li class="reveal"><span class="artist-number">03</span><h3>M.E.G</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-          <li class="reveal"><span class="artist-number">04</span><h3>FRDM</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-          <li class="reveal"><span class="artist-number">05</span><h3>ACID BOSS</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-          <li class="reveal"><span class="artist-number">06</span><h3 class="artist-cyrillic">Девиантный Диалект</h3><span class="artist-glyph" aria-hidden="true">↗</span></li>
-        </ol>
+        <section
+          class="manifesto section"
+          id="manifesto"
+          aria-labelledby="manifesto-title"
+        >
+          <div>
+            <p class="eyebrow section-label">
+              02 <span class="slash">/</span> MANIFESTO
+            </p>
+            <h2 id="manifesto-title">
+              NO<br />RULES<span class="dot" aria-hidden="true"></span>
+            </h2>
+          </div>
+          <div class="manifesto-copy">
+            <p>
+              <strong>PARLADOR</strong> — не просто вечеринка. Это звук, энергия
+              и люди, которые выбирают настоящую атмосферу андеграунда.
+            </p>
+            <p class="eyebrow manifesto-signature">
+              <span class="slash">/</span> RAW SOUND / INDUSTRIAL SPACE / ONE
+              COMMUNITY
+            </p>
+          </div>
+        </section>
+
+        <section class="event section" id="event" aria-labelledby="event-title">
+          <div class="event-date">
+            <p class="eyebrow section-label">
+              03 <span class="slash">/</span> NEXT EVENT
+            </p>
+            <h2 id="event-title">
+              <time datetime="2026-12-19"
+                >19 DEC<br />2026<span class="dot" aria-hidden="true"></span
+              ></time>
+            </h2>
+          </div>
+          <div class="countdown-area">
+            <p class="eyebrow" id="countdown-label">COUNTDOWN / MOSCOW TIME</p>
+            <div
+              class="countdown"
+              role="timer"
+              aria-live="off"
+              aria-label="До начала мероприятия"
+            >
+              <div><span id="days">—</span><small>DAYS</small></div>
+              <div><span id="hours">—</span><small>HOURS</small></div>
+              <div><span id="minutes">—</span><small>MINUTES</small></div>
+              <div><span id="seconds">—</span><small>SECONDS</small></div>
+            </div>
+            <p class="time-note">Начало: 19 декабря, 22:00 МСК (UTC+3)</p>
+            <noscript
+              ><p class="time-note">
+                Включите JavaScript для обратного отсчёта.
+              </p></noscript
+            >
+          </div>
+          <div class="tickets" id="tickets">
+            <h2 class="sr-only">TICKETS</h2>
+            <dl>
+              <div>
+                <dt>VENUE</dt>
+                <dd>FABULA, MOSCOW</dd>
+              </div>
+              <div>
+                <dt>TIME</dt>
+                <dd>22:00 — 06:00</dd>
+              </div>
+              <div>
+                <dt>TICKETS</dt>
+                <dd>COMING SOON</dd>
+              </div>
+            </dl>
+            <button
+              class="button tickets-button"
+              id="ticket-button"
+              type="button"
+              aria-haspopup="dialog"
+            >
+              GET TICKETS
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 19 19 5M5 5h14v14" />
+              </svg>
+            </button>
+            <p class="ticket-note">До 06:00 20 декабря / МСК</p>
+          </div>
+        </section>
       </div>
-    </section>
+    </main>
 
-    <section class="manifesto section-wrap" id="manifesto" aria-labelledby="manifesto-title">
-      <div class="manifesto-texture" aria-hidden="true"></div>
-      <div class="section-top reveal"><p class="eyebrow"><span class="red">[02]</span> НАШ МАНИФЕСТ</p><p class="mono section-note">BEYOND THE SURFACE</p></div>
-      <div class="manifesto-layout">
-        <h2 id="manifesto-title" class="reveal">MANI<br>FESTO<span class="red">.</span></h2>
-        <div class="manifesto-copy reveal"><p class="manifesto-lead">ГОРОД ЗАТИХАЕТ.<br><span>МЫ СТАНОВИМСЯ ГРОМЧЕ.</span></p><p>PARLADOR — пространство, где город растворяется в звуке. Бетон, красный свет и плотный ритм собирают нас на одном танцполе. Здесь музыка говорит громче слов, а движение становится общим языком.</p><p>Мы ищем свободу внутри ритма. От первого импульса до утренней тишины.</p><div class="manifesto-signature"><span class="red" aria-hidden="true">✳</span><span class="mono">ОДИН ТАНЦПОЛ.<br>ОБЩИЙ ИМПУЛЬС.</span></div></div>
-      </div>
-    </section>
+    <footer class="footer">
+      <a class="wordmark" href="#home" aria-label="PARLADOR — наверх"
+        >PARLADOR<span class="dot" aria-hidden="true"></span
+      ></a>
+      <p class="eyebrow">UNDERGROUND ONLY</p>
+      <p class="eyebrow copyright">© 2026</p>
+    </footer>
 
-    <section class="event section-wrap" id="event" aria-labelledby="event-title">
-      <div class="section-top reveal"><p class="eyebrow"><span class="red">[03]</span> МЕСТО И ВРЕМЯ</p><p class="mono section-note">SAVE THE NIGHT</p></div>
-      <div class="event-layout">
-        <div class="event-heading reveal"><h2 id="event-title">THE<br>NEXT <span class="red">NIGHT</span></h2><p>Оставь город за дверью.<br>Встретимся на танцполе.</p></div>
-        <div class="event-details reveal"><dl><div><dt>ДАТА / DATE</dt><dd><time datetime="2026-12-19">19 ДЕКАБРЯ 2026</time><small>СУББОТА → ВОСКРЕСЕНЬЕ</small></dd></div><div><dt>МЕСТО / VENUE</dt><dd>FABULA<small>МОСКВА</small></dd></div><div><dt>ВРЕМЯ / TIME</dt><dd>22:00 — 06:00<small>МОСКОВСКОЕ ВРЕМЯ / UTC+3<br>ДО 06:00 20 ДЕКАБРЯ</small></dd></div></dl><button class="calendar-button" id="calendar-button" type="button">ДОБАВИТЬ В КАЛЕНДАРЬ <span aria-hidden="true">＋</span></button><p class="sr-only" role="status" id="calendar-status"></p></div>
-      </div>
-      <div class="countdown-block reveal"><div class="countdown-caption"><span class="signal eyebrow"><i></i> <span id="countdown-label">ДО ПЕРВОГО ИМПУЛЬСА</span></span><span class="mono">19.12.2026 / 22:00 МСК</span></div><div class="countdown" id="countdown" role="timer" aria-label="До начала мероприятия" aria-live="off"><div><span id="days">—</span><small>ДНЕЙ</small></div><b aria-hidden="true">:</b><div><span id="hours">—</span><small>ЧАСОВ</small></div><b aria-hidden="true">:</b><div><span id="minutes">—</span><small>МИНУТ</small></div><b aria-hidden="true">:</b><div><span id="seconds">—</span><small>СЕКУНД</small></div></div><noscript><p>Начало: 19 декабря 2026, 22:00 МСК. Для обратного отсчёта включите JavaScript.</p></noscript></div>
-    </section>
-
-    <section class="tickets section-wrap" id="tickets" aria-labelledby="tickets-title"><div class="tickets-orbit" aria-hidden="true"></div><div class="section-top reveal"><p class="eyebrow">[04] ТВОЯ СЛЕДУЮЩАЯ НОЧЬ</p><span class="mono section-note">SEE YOU ON THE DANCEFLOOR</span></div><div class="tickets-content reveal"><h2 id="tickets-title">BE PART<br>OF THE <span>NIGHT.</span></h2><div class="ticket-action"><p>19 ДЕКАБРЯ 2026<br>FABULA / МОСКВА</p><button class="button button-light" id="ticket-button" type="button" aria-haspopup="dialog">КУПИТЬ БИЛЕТ <span aria-hidden="true">↗</span></button><span class="ticket-demo mono">ДЕМО • ПРОДАЖА НЕ ПОДКЛЮЧЕНА</span></div></div></section>
-  </main>
-
-  <footer class="site-footer"><a class="footer-logo" href="#home">PARLADOR</a><p class="mono">MOSCOW UNDERGROUND TECHNO<br>© 2026 PARLADOR</p><a class="back-top mono" href="#home">НАВЕРХ <span aria-hidden="true">↑</span></a></footer>
-
-  <dialog id="ticket-dialog" class="ticket-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description"><button type="button" class="dialog-close" id="dialog-close" aria-label="Закрыть окно">×</button><p class="eyebrow red">PARLADOR / TICKETS</p><h2 id="dialog-title">УВИДИМСЯ<br>НА ТАНЦПОЛЕ.</h2><p id="dialog-description">Это демонстрационная кнопка. Продажа билетов пока не подключена.</p><div class="dialog-event mono">19.12.2026 • FABULA, МОСКВА<br>22:00–06:00 МСК</div><button type="button" class="button button-red" id="dialog-confirm">ПОНЯТНО <span aria-hidden="true">↗</span></button></dialog>
-</body>
+    <dialog
+      class="ticket-dialog"
+      id="ticket-dialog"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <button
+        class="dialog-close"
+        id="dialog-close"
+        type="button"
+        aria-label="Закрыть окно"
+      >
+        ×
+      </button>
+      <p class="eyebrow">PARLADOR / TICKETS</p>
+      <h2 id="dialog-title">
+        COMING<br />SOON<span class="dot" aria-hidden="true"></span>
+      </h2>
+      <p id="dialog-description">
+        Продажа билетов пока не открыта. Это демонстрационная кнопка.
+      </p>
+      <p class="dialog-event">
+        19.12.2026 / FABULA, MOSCOW<br />22:00–06:00 МСК
+      </p>
+      <button class="button" id="dialog-confirm" type="button">
+        ПОНЯТНО <span aria-hidden="true">↗</span>
+      </button>
+    </dialog>
+    <noscript
+      ><style>
+        .menu-toggle,
+        .lineup-controls {
+          display: none;
+        }
+        .desktop-nav {
+          display: flex !important;
+          flex-wrap: wrap;
+        }
+        .header {
+          height: auto;
+          min-height: 60px;
+          flex-wrap: wrap;
+          padding-top: 15px;
+          padding-bottom: 15px;
+        }
+        .artist-list {
+          scrollbar-width: thin;
+        }
+      </style></noscript
+    >
+  </body>
 </html>

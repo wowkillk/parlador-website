@@ -1,115 +1,203 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const eventStart = new Date('2026-12-19T22:00:00+03:00').getTime();
-  const eventEnd = new Date('2026-12-20T06:00:00+03:00').getTime();
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const header = document.querySelector('.site-header');
-  const menuButton = document.querySelector('.menu-toggle');
-  const navigation = document.querySelector('.navigation');
-  const mobile = window.matchMedia('(max-width: 760px)');
+  const start = Date.parse("2026-12-19T22:00:00+03:00");
+  const end = Date.parse("2026-12-20T06:00:00+03:00");
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const menuButton = document.querySelector(".menu-toggle");
+  const menu = document.getElementById("menu-panel");
+  const menuLinks = [...menu.querySelectorAll("a")];
+  let shade;
 
-  header.classList.add('menu-enhanced');
-  function setMenu(open, returnFocus = false) {
-    menuButton.setAttribute('aria-expanded', String(open));
-    menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-    navigation.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    if (open) navigation.querySelector('a').focus();
-    if (returnFocus) menuButton.focus();
+  function closeMenu(returnFocus = false) {
+    menu.hidden = true;
+    menu.inert = true;
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Открыть меню");
+    document.body.classList.remove("menu-open");
+    shade?.remove();
+    shade = undefined;
+    if (returnFocus) menuButton.focus({ preventScroll: true });
   }
-  menuButton.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
-  navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false, mobile.matches)));
-  mobile.addEventListener('change', () => setMenu(false));
-  document.addEventListener('keydown', event => {
-    if (menuButton.getAttribute('aria-expanded') !== 'true') return;
-    if (event.key === 'Escape') { event.preventDefault(); setMenu(false, true); }
-    if (event.key === 'Tab') {
-      const links = [...navigation.querySelectorAll('a')];
-      const first = menuButton;
-      const last = links[links.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+
+  function openMenu() {
+    menu.hidden = false;
+    menu.inert = false;
+    menuButton.setAttribute("aria-expanded", "true");
+    menuButton.setAttribute("aria-label", "Закрыть меню");
+    document.body.classList.add("menu-open");
+    shade = document.createElement("div");
+    shade.className = "menu-shade";
+    shade.setAttribute("aria-hidden", "true");
+    shade.addEventListener("click", () => closeMenu(true));
+    document.querySelector(".hero-shell").appendChild(shade);
+    menuLinks[0].focus();
+  }
+
+  menuButton.addEventListener("click", () =>
+    menu.hidden ? openMenu() : closeMenu(true),
+  );
+  menuLinks.forEach((link) =>
+    link.addEventListener("click", () => {
+      closeMenu();
+      const target = document.querySelector(link.getAttribute("href"));
+      if (target) {
+        target.setAttribute("tabindex", "-1");
+        target.focus({ preventScroll: true });
+        target.addEventListener(
+          "blur",
+          () => target.removeAttribute("tabindex"),
+          { once: true },
+        );
+      }
+    }),
+  );
+
+  document.addEventListener("keydown", (event) => {
+    if (menu.hidden) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeMenu(true);
+    }
+    if (event.key === "Tab") {
+      const last = menuLinks[menuLinks.length - 1];
+      if (event.shiftKey && document.activeElement === menuButton) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        menuButton.focus();
+      }
     }
   });
+  window.addEventListener("resize", () => {
+    if (!menu.hidden) closeMenu(true);
+  });
 
-  const fields = ['days', 'hours', 'minutes', 'seconds'].map(id => document.getElementById(id));
-  const countdownLabel = document.getElementById('countdown-label');
-  const countdown = document.getElementById('countdown');
+  const countdown = document.querySelector(".countdown");
+  const label = document.getElementById("countdown-label");
+  const fields = ["days", "hours", "minutes", "seconds"].map((id) =>
+    document.getElementById(id),
+  );
   function updateCountdown() {
     const now = Date.now();
-    const remaining = Math.max(0, Math.floor((eventStart - now) / 1000));
-    const values = [Math.floor(remaining / 86400), Math.floor(remaining % 86400 / 3600), Math.floor(remaining % 3600 / 60), remaining % 60];
-    fields.forEach((field, index) => { field.textContent = String(values[index]).padStart(2, '0'); });
-    countdown.setAttribute('aria-label', `До начала: ${values[0]} дн., ${values[1]} ч., ${values[2]} мин., ${values[3]} сек.`);
-    if (now >= eventEnd) {
-      countdownLabel.textContent = 'ЭТА НОЧЬ ОСТАНЕТСЯ С НАМИ';
-      countdown.setAttribute('aria-label', 'Мероприятие завершилось');
-    } else if (now >= eventStart) {
-      countdownLabel.textContent = 'НОЧЬ УЖЕ НАЧАЛАСЬ';
-      countdown.setAttribute('aria-label', 'Мероприятие началось');
+    const seconds = Math.max(0, Math.floor((start - now) / 1000));
+    const values = [
+      Math.floor(seconds / 86400),
+      Math.floor((seconds % 86400) / 3600),
+      Math.floor((seconds % 3600) / 60),
+      seconds % 60,
+    ];
+    values.forEach((value, index) => {
+      fields[index].textContent = String(value).padStart(2, "0");
+    });
+    if (now >= end) {
+      label.textContent = "SESSION COMPLETE / MOSCOW TIME";
+      countdown.setAttribute("aria-label", "Мероприятие завершилось");
+    } else if (now >= start) {
+      label.textContent = "THE NIGHT IS ON / MOSCOW TIME";
+      countdown.setAttribute("aria-label", "Мероприятие началось");
+    } else {
+      label.textContent = "COUNTDOWN / MOSCOW TIME";
+      countdown.setAttribute(
+        "aria-label",
+        `До начала: ${values[0]} дн., ${values[1]} ч., ${values[2]} мин., ${values[3]} сек.`,
+      );
     }
   }
   updateCountdown();
-  const timer = window.setInterval(updateCountdown, 1000);
-  window.addEventListener('pagehide', () => window.clearInterval(timer), { once: true });
-  window.addEventListener('pageshow', event => { if (event.persisted) window.location.reload(); });
+  window.setInterval(updateCountdown, 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) updateCountdown();
+  });
 
-  const dialog = document.getElementById('ticket-dialog');
-  const ticketButton = document.getElementById('ticket-button');
-  ticketButton.addEventListener('click', () => {
+  const artists = document.getElementById("artist-list");
+  const previous = document.getElementById("artists-prev");
+  const next = document.getElementById("artists-next");
+  const position = document.getElementById("artists-position");
+  const cards = [...artists.querySelectorAll(".artist-card")];
+  function updateArtistControls() {
+    const cardWidth = cards[0].getBoundingClientRect().width;
+    const gap =
+      Number.parseFloat(window.getComputedStyle(artists).columnGap) || 0;
+    const step = cardWidth + gap;
+    if (step <= 0) return;
+    const first = Math.max(
+      1,
+      Math.min(cards.length, Math.round(artists.scrollLeft / step) + 1),
+    );
+    const visible = Math.max(1, Math.round((artists.clientWidth + gap) / step));
+    previous.disabled = artists.scrollLeft <= 2;
+    next.disabled =
+      artists.scrollLeft + artists.clientWidth >= artists.scrollWidth - 2;
+    position.textContent = `${String(first).padStart(2, "0")} — ${String(Math.min(cards.length, first + visible - 1)).padStart(2, "0")} / 06`;
+  }
+  function moveArtists(direction) {
+    artists.scrollBy({
+      left: direction * artists.clientWidth,
+      behavior: motion.matches ? "instant" : "smooth",
+    });
+  }
+  previous.addEventListener("click", () => moveArtists(-1));
+  next.addEventListener("click", () => moveArtists(1));
+  artists.addEventListener("scroll", updateArtistControls, { passive: true });
+  artists.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+      event.preventDefault();
+      moveArtists(event.key === "ArrowRight" ? 1 : -1);
+    }
+  });
+  window.addEventListener("resize", updateArtistControls);
+  updateArtistControls();
+
+  const ticketButton = document.getElementById("ticket-button");
+  const dialog = document.getElementById("ticket-dialog");
+  ticketButton.addEventListener("click", () => {
     dialog.showModal();
-    document.body.classList.add('modal-open');
+    document.body.classList.add("dialog-open");
   });
-  document.getElementById('dialog-close').addEventListener('click', () => dialog.close());
-  document.getElementById('dialog-confirm').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', event => {
+  document
+    .getElementById("dialog-close")
+    .addEventListener("click", () => dialog.close());
+  document
+    .getElementById("dialog-confirm")
+    .addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (event) => {
+    if (event.target !== dialog || event.detail === 0) return;
     const bounds = dialog.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+    if (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    )
+      dialog.close();
   });
-  dialog.addEventListener('close', () => {
-    document.body.classList.remove('modal-open');
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("dialog-open");
     ticketButton.focus({ preventScroll: true });
   });
 
-  document.getElementById('calendar-button').addEventListener('click', () => {
-    const calendar = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PARLADOR//EVENT 2026//RU', 'CALSCALE:GREGORIAN',
-      'BEGIN:VEVENT', 'UID:parlador-20261219-fabula@parlador.local', 'DTSTAMP:20261105T000000Z',
-      'DTSTART:20261219T190000Z', 'DTEND:20261220T030000Z', 'SUMMARY:PARLADOR — Fabula',
-      'LOCATION:Fabula\\, Москва',
-      'DESCRIPTION:PARLADOR. 19 декабря 2026\\, 22:00–06:00 МСК. DJ KALASHNIKOV / DANJAMIN / M.E.G / FRDM / ACID BOSS / Девиантный Диалект.',
-      'END:VEVENT', 'END:VCALENDAR', ''
-    ].join('\r\n');
-    const url = URL.createObjectURL(new Blob(['\ufeff', calendar], { type: 'text/calendar;charset=utf-8' }));
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'PARLADOR-19-12-2026.ics';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 3000);
-    document.getElementById('calendar-status').textContent = 'Файл события для календаря подготовлен.';
-  });
-
-  if ('IntersectionObserver' in window && !reducedMotion.matches) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.remove('is-pending');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(element => {
-      if (element.getBoundingClientRect().top > window.innerHeight) element.classList.add('is-pending');
-      observer.observe(element);
-    });
-    reducedMotion.addEventListener('change', event => {
-      if (event.matches) {
-        observer.disconnect();
-        document.querySelectorAll('.is-pending').forEach(element => element.classList.remove('is-pending'));
-      }
-    });
+  if ("IntersectionObserver" in window) {
+    const links = [...document.querySelectorAll(".desktop-nav a")];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          let id = entry.target.id;
+          if (id === "event") id = "tickets";
+          links.forEach((link) => {
+            const active = link.hash === `#${id}`;
+            link.classList.toggle("active", active);
+            if (active) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
+        });
+      },
+      { rootMargin: "-15% 0px -55% 0px" },
+    );
+    ["home", "lineup", "manifesto", "event"].forEach((id) =>
+      observer.observe(document.getElementById(id)),
+    );
   }
 })();
