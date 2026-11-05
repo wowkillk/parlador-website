@@ -28,6 +28,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="site-config.js" defer></script>
+    <script src="ticket-pricing.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -154,10 +155,9 @@
             <article
               class="artist-card artist-one"
               data-artist-id="dj-kalashnikov"
-              aria-label="Артист 1 из 7: DJ KALASHNIKOV"
+              aria-label="Артист 1 из 7: KALASHNIKOV"
             >
-              <p class="eyebrow">ARTIST 001</p>
-              <h3>DJ<br /><span class="artist-name-long">KALASHNIKOV</span></h3>
+              <h3>KALASHNIKOV</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
             <article
@@ -165,7 +165,6 @@
               data-artist-id="danjamin"
               aria-label="Артист 2 из 7: DANJAMIN"
             >
-              <p class="eyebrow">ARTIST 002</p>
               <h3>DANJAMIN</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
@@ -174,7 +173,6 @@
               data-artist-id="meg"
               aria-label="Артист 3 из 7: M.E.G"
             >
-              <p class="eyebrow">ARTIST 003</p>
               <h3>M.E.G</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
@@ -183,7 +181,6 @@
               data-artist-id="frdm"
               aria-label="Артист 4 из 7: FRDM"
             >
-              <p class="eyebrow">ARTIST 004</p>
               <h3>FRDM</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
@@ -192,7 +189,6 @@
               data-artist-id="acid-boss"
               aria-label="Артист 5 из 7: ACID BOSS"
             >
-              <p class="eyebrow">ARTIST 005</p>
               <h3>ACID BOSS</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
@@ -201,17 +197,15 @@
               data-artist-id="deviantny-dialekt"
               aria-label="Артист 6 из 7: Девиантный Диалект"
             >
-              <p class="eyebrow">ARTIST 006</p>
               <h3 class="cyrillic">Девиантный<br />Диалект</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
             <article
               class="artist-card artist-seven"
               data-artist-id="dj-alwen"
-              aria-label="Артист 7 из 7: DJ ALWEN"
+              aria-label="Артист 7 из 7: ALWEN"
             >
-              <p class="eyebrow">ARTIST 007</p>
-              <h3>DJ<br />ALWEN</h3>
+              <h3>ALWEN</h3>
               <p class="artist-caption">PARLADOR</p>
             </article>
           </div>
@@ -299,13 +293,21 @@
             <p class="eyebrow section-label">04 <span class="slash">/</span> ACCESS THE NIGHT</p>
             <h2 id="tickets-title">TICKETS<span class="dot" aria-hidden="true"></span></h2>
           </div>
-          <div class="ticket-panel">
-            <p class="eyebrow phase-status" id="ticket-status" role="status">COMING SOON</p>
-            <p class="phase-copy" id="ticket-message">Продажа билетов пока не открыта. Информация о категориях и стоимости появится здесь.</p>
-            <div class="ticket-categories" id="ticket-categories" hidden></div>
+          <div class="ticket-panel pricing-card">
+            <p class="eyebrow preview-notice" id="ticket-preview" hidden>LOCAL PREVIEW / ТЕСТОВОЕ ВРЕМЯ</p>
+            <div class="pricing-summary" aria-live="polite" aria-atomic="true">
+              <p class="eyebrow phase-status" id="ticket-status">COMING SOON</p>
+              <p class="ticket-price" id="ticket-price" hidden></p>
+              <p class="ticket-period" id="ticket-period">Расписание ценовых этапов.</p>
+              <p class="ticket-next" id="ticket-next"></p>
+            </div>
+            <p class="ticket-slogan"><span>BUY EARLY.</span> <span>PAY LESS.</span></p>
+            <ol class="price-stages" id="price-stages" aria-label="Пять ценовых этапов"></ol>
+            <p class="phase-copy" id="ticket-message">Цены анонсированы. Билетная платформа пока не подключена.</p>
             <button class="button phase-button" id="ticket-unavailable" type="button" disabled aria-describedby="ticket-message">BUY TICKET <span aria-hidden="true">↗</span></button>
             <a class="button phase-button" id="ticket-buy" hidden>BUY TICKET <span aria-hidden="true">↗</span></a>
-            <p class="eyebrow phase-footnote">19.12.2026 / FABULA — MOSCOW</p>
+            <p class="pricing-disclaimer">Отображение зависит от часов вашего устройства. Окончательная стоимость и доступность билетов определяются билетной платформой.</p>
+            <noscript><p class="pricing-disclaimer">Включите JavaScript для актуального этапа и расписания цен. Цена покупки определяется билетной платформой.</p></noscript>
           </div>
         </section>
         <section class="community section" id="community" aria-labelledby="community-title">
@@ -356,4 +358,6 @@
     >
   </body>
 </html>
+
+
 
