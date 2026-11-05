@@ -27,6 +27,7 @@
       fetchpriority="high"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script src="site-config.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -42,6 +43,7 @@
             <a href="#lineup">LINEUP</a>
             <a href="#manifesto">MANIFESTO</a>
             <a href="#tickets">TICKETS</a>
+            <a href="#community">COMMUNITY</a>
           </nav>
           <button
             class="menu-toggle"
@@ -64,6 +66,7 @@
             ><a href="#manifesto"><span>02 /</span> MANIFESTO</a
             ><a href="#event"><span>03 /</span> EVENT</a
             ><a href="#tickets"><span>04 /</span> TICKETS</a>
+            <a href="#community"><span>05 /</span> COMMUNITY</a>
             <p>19.12.2026<br />FABULA — MOSCOW</p>
           </nav>
         </header>
@@ -150,6 +153,7 @@
           >
             <article
               class="artist-card artist-one"
+              data-artist-id="dj-kalashnikov"
               aria-label="Артист 1 из 7: DJ KALASHNIKOV"
             >
               <p class="eyebrow">ARTIST 001</p>
@@ -158,6 +162,7 @@
             </article>
             <article
               class="artist-card artist-two"
+              data-artist-id="danjamin"
               aria-label="Артист 2 из 7: DANJAMIN"
             >
               <p class="eyebrow">ARTIST 002</p>
@@ -166,6 +171,7 @@
             </article>
             <article
               class="artist-card artist-three"
+              data-artist-id="meg"
               aria-label="Артист 3 из 7: M.E.G"
             >
               <p class="eyebrow">ARTIST 003</p>
@@ -174,6 +180,7 @@
             </article>
             <article
               class="artist-card artist-four"
+              data-artist-id="frdm"
               aria-label="Артист 4 из 7: FRDM"
             >
               <p class="eyebrow">ARTIST 004</p>
@@ -182,6 +189,7 @@
             </article>
             <article
               class="artist-card artist-five"
+              data-artist-id="acid-boss"
               aria-label="Артист 5 из 7: ACID BOSS"
             >
               <p class="eyebrow">ARTIST 005</p>
@@ -190,6 +198,7 @@
             </article>
             <article
               class="artist-card artist-six"
+              data-artist-id="deviantny-dialekt"
               aria-label="Артист 6 из 7: Девиантный Диалект"
             >
               <p class="eyebrow">ARTIST 006</p>
@@ -198,6 +207,7 @@
             </article>
             <article
               class="artist-card artist-seven"
+              data-artist-id="dj-alwen"
               aria-label="Артист 7 из 7: DJ ALWEN"
             >
               <p class="eyebrow">ARTIST 007</p>
@@ -263,8 +273,8 @@
               </p></noscript
             >
           </div>
-          <div class="tickets" id="tickets">
-            <h2 class="sr-only">TICKETS</h2>
+          <div class="tickets event-details">
+            <h2 class="sr-only">Информация о событии</h2>
             <dl>
               <div>
                 <dt>VENUE</dt>
@@ -276,21 +286,39 @@
               </div>
               <div>
                 <dt>TICKETS</dt>
-                <dd>COMING SOON</dd>
+                <dd id="event-ticket-status">COMING SOON</dd>
               </div>
             </dl>
-            <button
-              class="button tickets-button"
-              id="ticket-button"
-              type="button"
-              aria-haspopup="dialog"
-            >
-              GET TICKETS
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 19 19 5M5 5h14v14" />
-              </svg>
-            </button>
+            <a class="button tickets-button" href="#tickets">TICKETS <span aria-hidden="true">↗</span></a>
             <p class="ticket-note">До 06:00 20 декабря / МСК</p>
+          </div>
+        </section>
+
+        <section class="ticket-section section" id="tickets" aria-labelledby="tickets-title">
+          <div class="phase-heading">
+            <p class="eyebrow section-label">04 <span class="slash">/</span> ACCESS THE NIGHT</p>
+            <h2 id="tickets-title">TICKETS<span class="dot" aria-hidden="true"></span></h2>
+          </div>
+          <div class="ticket-panel">
+            <p class="eyebrow phase-status" id="ticket-status" role="status">COMING SOON</p>
+            <p class="phase-copy" id="ticket-message">Продажа билетов пока не открыта. Информация о категориях и стоимости появится здесь.</p>
+            <div class="ticket-categories" id="ticket-categories" hidden></div>
+            <button class="button phase-button" id="ticket-unavailable" type="button" disabled aria-describedby="ticket-message">BUY TICKET <span aria-hidden="true">↗</span></button>
+            <a class="button phase-button" id="ticket-buy" hidden>BUY TICKET <span aria-hidden="true">↗</span></a>
+            <p class="eyebrow phase-footnote">19.12.2026 / FABULA — MOSCOW</p>
+          </div>
+        </section>
+        <section class="community section" id="community" aria-labelledby="community-title">
+          <div class="phase-heading">
+            <p class="eyebrow section-label">05 <span class="slash">/</span> STAY CONNECTED</p>
+            <h2 id="community-title">PARLADOR<br />COMMUNITY<span class="dot" aria-hidden="true"></span></h2>
+          </div>
+          <div class="community-copy">
+            <p class="phase-copy">Следующая ночь начинается с людей. Здесь будут анонсы PARLADOR, будущие мероприятия и новости развития нашего сообщества.</p>
+            <p class="phase-copy community-note" id="telegram-message">Ссылка на Telegram появится здесь после запуска канала.</p>
+            <button class="button phase-button" id="telegram-unavailable" type="button" disabled aria-describedby="telegram-message">JOIN TELEGRAM <span aria-hidden="true">↗</span></button>
+            <a class="button phase-button" id="telegram-join" hidden>JOIN TELEGRAM <span aria-hidden="true">↗</span></a>
+            <p class="eyebrow phase-footnote">ONE COMMUNITY / UNDERGROUND ONLY</p>
           </div>
         </section>
       </div>
@@ -304,34 +332,6 @@
       <p class="eyebrow copyright">© 2026</p>
     </footer>
 
-    <dialog
-      class="ticket-dialog"
-      id="ticket-dialog"
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-    >
-      <button
-        class="dialog-close"
-        id="dialog-close"
-        type="button"
-        aria-label="Закрыть окно"
-      >
-        ×
-      </button>
-      <p class="eyebrow">PARLADOR / TICKETS</p>
-      <h2 id="dialog-title">
-        COMING<br />SOON<span class="dot" aria-hidden="true"></span>
-      </h2>
-      <p id="dialog-description">
-        Продажа билетов пока не открыта. Это демонстрационная кнопка.
-      </p>
-      <p class="dialog-event">
-        19.12.2026 / FABULA, MOSCOW<br />22:00–06:00 МСК
-      </p>
-      <button class="button" id="dialog-confirm" type="button">
-        ПОНЯТНО <span aria-hidden="true">↗</span>
-      </button>
-    </dialog>
     <noscript
       ><style>
         .menu-toggle,
@@ -356,3 +356,4 @@
     >
   </body>
 </html>
+
