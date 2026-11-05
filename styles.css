@@ -587,6 +587,9 @@ h2 {
 .artist-six:before {
   background-position: 53% 20%;
 }
+.artist-seven:before {
+  background-position: 72% 56%;
+}
 .artist-card > .eyebrow {
   font-size: 12px;
   letter-spacing: 0.16em;
