@@ -19,7 +19,16 @@
     const get = (id) => document.getElementById(id);
     const dateFormat = new Intl.DateTimeFormat("ru-RU", { timeZone: config.timeZone, day: "numeric", month: "long" });
     const date = (value) => dateFormat.format(new Date(value));
-    const period = (stage) => stage.kind === "door" ? `${date(stage.start)}, 00:00 — ${date(stage.end)}, 06:00 2026 / МСК` : `${date(stage.start)} — ${date(Date.parse(stage.end) - 1)} 2026 / МСК`;
+    // Display dates are compact; stage boundaries still use the configured instants.
+    const period = (stage) => {
+      if (stage.kind === "door") return date(stage.start);
+      const start = dateFormat.formatToParts(new Date(stage.start));
+      const end = dateFormat.formatToParts(new Date(Date.parse(stage.end) - 1));
+      const part = (parts, type) => parts.find((item) => item.type === type).value;
+      return part(start, "month") === part(end, "month")
+        ? `${part(start, "day")}–${part(end, "day")} ${part(start, "month")}`
+        : `${date(stage.start)} – ${date(Date.parse(stage.end) - 1)}`;
+    };
     const money = (stage) => `${new Intl.NumberFormat("ru-RU").format(stage.price)} ₽`;
     const url = platformUrl(config.platformUrl);
     const buy = get("ticket-buy");
@@ -33,9 +42,9 @@
     const loadedAt = performance.now();
     const now = () => preview ? previewTime + performance.now() - loadedAt : Date.now();
     get("ticket-preview").hidden = !preview;
-    const rows = stages.map((stage, index) => {
+    const rows = stages.map((stage) => {
       const row = document.createElement("li");
-      const number = document.createElement("span"); number.className = "eyebrow"; number.textContent = stage.kind === "door" ? "AT THE DOOR / НА ВХОДЕ" : `ЭТАП 0${index + 1}`;
+      const number = document.createElement("span"); number.className = "eyebrow"; number.textContent = stage.label;
       if (stage.kind === "door") row.classList.add("is-door");
       const price = document.createElement("strong"); price.textContent = money(stage);
       const dates = document.createElement("span"); dates.textContent = period(stage);
@@ -53,18 +62,18 @@
       lastKey = key;
       const active = state.kind === "active";
       const door = active && state.current.kind === "door";
-      get("ticket-status").textContent = door ? "AT THE DOOR / НА ВХОДЕ" : active ? `АНОНСИРОВАННАЯ ЦЕНА / ЭТАП 0${state.index + 1}` : state.kind === "before" ? "COMING SOON" : "SALES STATUS TO BE ANNOUNCED";
-      get("event-ticket-status").textContent = door ? "AT THE DOOR" : active ? "PRICE ANNOUNCED" : state.kind === "before" ? "COMING SOON" : "TO BE ANNOUNCED";
+      get("ticket-status").textContent = door ? state.current.label : active ? `АНОНСИРОВАННАЯ ЦЕНА / ${state.current.label}` : state.kind === "before" ? "COMING SOON" : "SALES STATUS TO BE ANNOUNCED";
+      get("event-ticket-status").textContent = door ? state.current.label : active ? "PRICE ANNOUNCED" : state.kind === "before" ? "COMING SOON" : "TO BE ANNOUNCED";
       get("ticket-price").hidden = !active;
       get("ticket-price").textContent = active ? money(state.current) : "";
-      get("ticket-period").textContent = active ? period(state.current) : state.kind === "before" ? "Первый этап — с 21 ноября 2026, 00:00 МСК." : "Ценовая сетка завершена. Статус дальнейших продаж будет объявлен отдельно.";
-      get("ticket-next").textContent = state.next ? `Следующая цена: ${money(state.next)}${state.next.kind === "door" ? " / AT THE DOOR — на входе" : ""} / с ${date(state.next.start)}, 00:00 МСК` : active ? "Следующий ценовой этап не объявлен." : "Новые цены пока не объявлены.";
+      get("ticket-period").textContent = active ? period(state.current) : state.kind === "before" ? `Первая неделя — с ${date(stages[0].start)}.` : "Ценовая сетка завершена. Статус дальнейших продаж будет объявлен отдельно.";
+      get("ticket-next").textContent = state.next ? `Следующая цена: ${money(state.next)} / ${state.next.label} — ${period(state.next)}` : active ? "Следующий ценовой этап не объявлен." : "Новые цены пока не объявлены.";
       // An announced stage alone never means checkout is available.
       const canBuy = active && !door && Boolean(url) && !preview;
       buy.hidden = !canBuy;
       get("ticket-unavailable").hidden = canBuy;
-      get("ticket-unavailable").textContent = door ? "AT THE DOOR / ТОЛЬКО НА ВХОДЕ" : "BUY TICKET ↗";
-      get("ticket-message").textContent = door ? "Покупка непосредственно на входе возможна только при наличии свободных мест. Стоимость носит информационный характер; фактическая доступность зависит от вместимости площадки и решения организаторов. Онлайн-покупка для AT THE DOOR недоступна." : preview ? "Тестовый просмотр. Покупка отключена." : !url ? "Цены анонсированы. Билетная платформа пока не подключена; покупка недоступна." : active ? "Проверить стоимость и наличие билетов можно на билетной платформе. Ссылка откроется в новой вкладке." : "Покупка на сайте недоступна. Ожидайте подтверждения статуса продаж.";
+      get("ticket-unavailable").textContent = door ? "НА ВХОДЕ" : "BUY TICKET ↗";
+      get("ticket-message").textContent = door ? "Покупка непосредственно на входе возможна только при наличии свободных мест. Стоимость носит информационный характер; фактическая доступность зависит от вместимости площадки и решения организаторов. Онлайн-покупка билетов на входе недоступна." : preview ? "Тестовый просмотр. Покупка отключена." : !url ? "Цены анонсированы. Билетная платформа пока не подключена; покупка недоступна." : active ? "Проверить стоимость и наличие билетов можно на билетной платформе. Ссылка откроется в новой вкладке." : "Покупка на сайте недоступна. Ожидайте подтверждения статуса продаж.";
       rows.forEach(({ row, status }, index) => {
         const current = active && index === state.index;
         const past = time >= Date.parse(stages[index].end);
@@ -83,3 +92,4 @@
   }
   window.PARLADOR_TICKETING = Object.freeze({ stateAt, mount });
 })();
+

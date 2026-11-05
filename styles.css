@@ -1928,3 +1928,19 @@ h2 {
 .price-stages .is-door { border-top-style: dashed; border-top-color: var(--readable-red); background: repeating-linear-gradient(135deg, #ffffff05 0 8px, transparent 8px 16px); }
 .price-stages .is-door.is-current { outline: 1px solid var(--red); background-color: #ec000b18; }
 .pricing-card .phase-button { white-space: normal; overflow-wrap: anywhere; }
+
+
+/* Slogan typography is scoped outside the existing stage cards. */
+.ticket-slogan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.08em 0.3em;
+  margin-top: 28px;
+  font-family: var(--display);
+  font-size: clamp(28px, 4.5vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  color: var(--white);
+}
+.ticket-slogan > span { white-space: nowrap; }
+.ticket-slogan > span:last-child { color: var(--red); }

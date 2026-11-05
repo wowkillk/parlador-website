@@ -31,7 +31,7 @@ test('open page changes through all stages and clears price at event end',()=>{
  assert.equal(r.get('ticket-status').textContent,'COMING SOON');
  const expected=[1700,1900,2300,2500,2700];
  r.config.stages.forEach((s,i)=>{r.advance(s.start);assert.equal(r.get('ticket-price').textContent.replace(/\D/g,''),String(expected[i]));assert.equal(r.get('ticket-buy').hidden,true)});
- assert.match(r.get('ticket-status').textContent,/AT THE DOOR/);assert.match(r.get('ticket-message').textContent,/свободных мест/);
+ assert.match(r.get('ticket-status').textContent,/НА ВХОДЕ/);assert.match(r.get('ticket-message').textContent,/свободных мест/);
  r.advance('2026-12-20T06:00:00+03:00');assert.equal(r.get('ticket-price').hidden,true);assert.equal(r.get('ticket-price').textContent,'');assert.equal(r.get('ticket-status').textContent,'SALES STATUS TO BE ANNOUNCED');
 });
 test('checkout requires HTTPS, active online stage; never enabled for door, before or after',()=>{
@@ -51,4 +51,33 @@ test('resume and focus refresh a stale page',()=>{
  const r=setup('2026-11-21T00:00:00+03:00');assert.equal(typeof r.events.visibilitychange,'function');assert.equal(typeof r.events.pageshow,'function');assert.equal(typeof r.events.focus,'function');
  r.events.visibilitychange();r.events.pageshow();r.events.focus();
  assert.equal(r.get('price-stages').children.length,5);
+});
+
+
+test('all five display labels, compact dates and prices match the approved copy',()=>{
+ const r=setup('2026-11-01T00:00:00Z');
+ const labels=['1 НЕДЕЛЯ','2 НЕДЕЛЯ','3 НЕДЕЛЯ','4 НЕДЕЛЯ','НА ВХОДЕ'];
+ const dates=['21–27 ноября','28 ноября – 4 декабря','5–11 декабря','12–18 декабря','19 декабря'];
+ const prices=[1700,1900,2300,2500,2700];
+ const rows=r.get('price-stages').children;
+ rows.forEach((row,i)=>{
+  assert.equal(row.children[0].textContent,labels[i]);
+  assert.equal(row.children[1].textContent.replace(/\D/g,''),String(prices[i]));
+  assert.equal(row.children[2].textContent,dates[i]);
+ });
+ function assertCompactDates(){
+  for(const id of ['ticket-period','ticket-next']) assert.doesNotMatch(r.get(id).textContent,/2026|\d{1,2}:\d{2}|МСК|MSK|Europe\/Moscow/);
+ }
+ assertCompactDates();
+ r.config.stages.forEach((stage,i)=>{
+  r.advance(stage.start);
+  assert.equal(r.get('ticket-status').textContent,i===4?'НА ВХОДЕ':`АНОНСИРОВАННАЯ ЦЕНА / ${labels[i]}`);
+  assert.equal(r.get('ticket-period').textContent,dates[i]);
+  assert.equal(r.get('ticket-buy').hidden,true);
+  assertCompactDates();
+  if(i<4) assert.match(r.get('ticket-next').textContent,new RegExp(labels[i+1]));
+ });
+ assert.equal(r.get('ticket-unavailable').textContent,'НА ВХОДЕ');
+ assert.doesNotMatch(r.get('ticket-message').textContent,/AT THE DOOR/);
+ r.advance(r.config.stages[4].end);assertCompactDates();
 });
