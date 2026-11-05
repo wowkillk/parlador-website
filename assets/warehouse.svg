@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" fill="none">
+  <defs>
+    <linearGradient id="air" x1="900" y1="0" x2="900" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#090a0a"/><stop offset=".46" stop-color="#171616"/><stop offset="1" stop-color="#0c0d0d"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="900" y1="540" x2="900" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#191719"/><stop offset=".38" stop-color="#262123"/><stop offset="1" stop-color="#0e1011"/>
+    </linearGradient>
+    <linearGradient id="leftWall" x1="0" y1="500" x2="660" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101111"/><stop offset=".46" stop-color="#2b2827"/><stop offset="1" stop-color="#161617"/>
+    </linearGradient>
+    <linearGradient id="rightWall" x1="1800" y1="500" x2="1130" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101011"/><stop offset=".45" stop-color="#292524"/><stop offset="1" stop-color="#171617"/>
+    </linearGradient>
+    <linearGradient id="column" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#111313"/><stop offset=".48" stop-color="#383231"/><stop offset=".82" stop-color="#252525"/><stop offset="1" stop-color="#101112"/>
+    </linearGradient>
+    <linearGradient id="redColumn" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#201313"/><stop offset=".52" stop-color="#422a28"/><stop offset="1" stop-color="#1d1b1b"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#171a1a"/><stop offset=".47" stop-color="#292a29"/><stop offset=".58" stop-color="#111212"/><stop offset="1" stop-color="#080a0a"/>
+    </linearGradient>
+    <linearGradient id="reflection" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#e92721" stop-opacity=".3"/><stop offset="1" stop-color="#b50d0b" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="redHaze" cx=".5" cy=".5" r=".5">
+      <stop stop-color="#e82b21" stop-opacity=".43"/><stop offset=".35" stop-color="#b91611" stop-opacity=".22"/><stop offset="1" stop-color="#a70b08" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="redGlow" cx=".5" cy=".5" r=".5">
+      <stop stop-color="#ff3726" stop-opacity=".8"/><stop offset=".17" stop-color="#d71b12" stop-opacity=".55"/><stop offset="1" stop-color="#e72a1c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx=".5" cy=".49" r=".7">
+      <stop offset=".3" stop-color="#020303" stop-opacity="0"/><stop offset=".7" stop-color="#020303" stop-opacity=".35"/><stop offset="1" stop-color="#020303" stop-opacity=".95"/>
+    </radialGradient>
+    <linearGradient id="topShade" x1="900" y1="0" x2="900" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020304" stop-opacity=".67"/><stop offset=".7" stop-color="#040506" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="26"/></filter>
+    <filter id="lightBlur"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".58" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".19"/></feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+    <filter id="fog" x="-20%" y="-40%" width="140%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency=".007 .018" numOctaves="3" seed="24"/>
+      <feDisplacementMap in="SourceGraphic" scale="105" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+    <pattern id="floorSpecks" width="117" height="91" patternUnits="userSpaceOnUse">
+      <path d="m8 31 19-1m49 47 17-2M44 17l8 1m36 24 11-1" stroke="#77716c" stroke-opacity=".1"/>
+      <path d="m17 68 5 2m45-51 3-1m23 58 6-2" stroke="#000" stroke-opacity=".35"/>
+    </pattern>
+  </defs>
+
+  <path fill="url(#air)" d="M0 0h1800v1100H0z"/>
+  <!-- Long concrete room, with all perspective lines meeting behind the stage. -->
+  <path d="M0 40 700 370v211L0 962Z" fill="url(#leftWall)"/>
+  <path d="m1800 10-690 360v211l690 381Z" fill="url(#rightWall)"/>
+  <path d="M700 370h410v218H700z" fill="#141516"/>
+  <path d="M734 394h340v160H734z" fill="#0c0e0f"/>
+  <path d="M758 416h290v134H758z" fill="#080b0b"/>
+  <path d="M0 0h1800l-690 371H700Z" fill="#101313"/>
+  <path d="m0 962 700-381h410l690 381v138H0Z" fill="url(#floor)"/>
+  <path d="M0 1100V961l700-380h410l690 380v139Z" fill="url(#floorSpecks)"/>
+
+  <!-- Shutter and panel seams remain barely visible in the dark. -->
+  <g stroke="#53504b" stroke-opacity=".17" stroke-width="2">
+    <path d="m0 272 700 165M0 446l700 60M0 652l700-90M1800 254l-690 178m690 12-690 63m690 135-690-85"/>
+    <path d="m119 97 4 798m173-715 1 622m143-551 1 471m117-416 1 353m109-309v252m1026-519-5 792m-176-711-1 624m-147-546v465m-115-411v350m-106-299v244"/>
+    <path d="M737 410h335m-335 18h335m-335 18h335m-335 18h335m-335 18h335m-335 18h335m-335 18h335m-335 18h335"/>
+  </g>
+  <g stroke="#070909" stroke-width="3" opacity=".7">
+    <path d="m291 303 30 11-3 60 15 7-8 83 14 25-5 69m-165-94-19 27 11 32-13 68 14 21-12 60m1329-307-22 34 14 35-21 49 14 42-19 53m90-31-11 33 17 18-18 68 11 21"/>
+  </g>
+
+  <!-- Receding ceiling trusses and exposed services. -->
+  <g fill="url(#beam)" stroke="#343737" stroke-opacity=".42">
+    <path d="M-50 77 1850 20v45L-50 142Z"/>
+    <path d="m177 144 1444-15-33 32-1368 30Z"/>
+    <path d="m375 240 1058-24-34 27-984 24Z"/>
+    <path d="m520 306 770-13-23 18-724 16Z"/>
+    <path d="m626 348 549-7-16 13-518 8Z"/>
+    <path d="M252 0h34l483 371h-15Z"/>
+    <path d="M1480 0h35L1046 371h-15Z"/>
+    <path d="M630 0h24l186 371h-9Z"/>
+    <path d="M1140 0h23l-189 371h-10Z"/>
+  </g>
+  <g stroke="#4b4d4b" stroke-opacity=".24" stroke-width="4">
+    <path d="m202 144 201 116-26-117 218 111-25-114 233 106-23-108 235 101-23-104 222 99-20-102 205 94"/>
+    <path d="m387 236 127 81-11-83 150 79-12-82 152 79-11-82 154 78-10-83 155 81-10-84 138 79"/>
+  </g>
+  <g stroke="#080b0b" stroke-width="9">
+    <path d="M0 182 754 383M1800 155l-756 229"/>
+    <path d="M114 0 784 380M1644 0l-628 381"/>
+  </g>
+  <g stroke="#494945" stroke-opacity=".28" stroke-width="2">
+    <path d="M0 177 754 378M1800 150l-756 229"/>
+    <path d="M111 0 782 375M1640 0l-627 377"/>
+  </g>
+  <path d="M1134 0v143l-17 21v47l-18 17v47l-19 12v34" stroke="#333633" stroke-width="7"/>
+  <path d="M1130 0v142l-16 21v47l-18 17v47l-19 12v33" stroke="#141818" stroke-width="5"/>
+
+  <!-- Pairs of concrete pillars, growing heavier toward the viewer. -->
+  <g>
+    <path d="m645 350 42 16-1 234-43 17Z" fill="url(#redColumn)"/>
+    <path d="m687 366 16 6-1 222-16 6Z" fill="#0b0d0e"/>
+    <path d="m1121 371 17-8 1 240-17-7Z" fill="#0b0d0e"/>
+    <path d="m1138 363 40-18 1 274-40-16Z" fill="url(#redColumn)"/>
+    <path d="m505 270 56 26-1 397-59 28Z" fill="url(#column)"/>
+    <path d="m561 296 28 13-3 371-26 13Z" fill="#111516"/>
+    <path d="m1237 301 24-12 3 404-27-14Z" fill="#111516"/>
+    <path d="m1261 289 57-28 7 460-61-28Z" fill="url(#column)"/>
+    <path d="m288 131 91 46-8 642-99 53Z" fill="url(#column)"/>
+    <path d="m379 177 45 23-12 597-41 22Z" fill="#101415"/>
+    <path d="m1422 184 45-24 16 659-47-25Z" fill="#111415"/>
+    <path d="m1467 160 95-51 24 763-103-53Z" fill="url(#column)"/>
+    <path d="M0 0h79L61 987 0 1025Z" fill="url(#column)"/>
+    <path d="m79 0 59 33-27 927-50 27Z" fill="#0a0e0f"/>
+    <path d="m1669 19 65-35 22 1006-57-32Z" fill="#101516"/>
+    <path d="M1734 0h66v1043l-44-53Z" fill="url(#column)"/>
+  </g>
+  <g fill="#080b0c" stroke="#5f514a" stroke-opacity=".15">
+    <path d="m269 853 105-54 46 16-112 62Z"/><path d="m1429 804 66 11 96 52-52 24Z"/>
+    <path d="m498 701 63-23 30 9-66 31Z"/><path d="m1230 677 42 6 59 29-32 12Z"/>
+    <path d="m637 605 51-17 22 6-50 19Z"/><path d="m1114 589 28 5 43 20-24 6Z"/>
+  </g>
+  <g stroke="#6e6158" stroke-opacity=".2" stroke-width="2">
+    <path d="m302 207-13 583m41-545-10 508m-22-348 69 18m-71 31 69 17m-76 169 75-5m-76 25 75-6m1142-480 15 599m-52-555 14 502m-21-331 71-18m-71 45 71-18m-65 205 76 7m-75 17 76 8"/>
+    <path d="m513 350 42 15m-43 17 43 15m-46 184 43-2m-42 17 42-3m718-228 42-16m-42 32 42-15m-35 215 44 4m-44 12 45 5"/>
+  </g>
+  <g fill="#070b0b">
+    <circle cx="310" cy="429" r="4"/><circle cx="351" cy="442" r="4"/><circle cx="306" cy="633" r="4"/><circle cx="350" cy="628" r="4"/>
+    <circle cx="1490" cy="422" r="4"/><circle cx="1536" cy="407" r="4"/><circle cx="1497" cy="624" r="4"/><circle cx="1540" cy="629" r="4"/>
+    <circle cx="523" cy="378" r="2"/><circle cx="546" cy="385" r="2"/><circle cx="523" cy="589" r="2"/><circle cx="546" cy="588" r="2"/>
+    <circle cx="1275" cy="382" r="2"/><circle cx="1297" cy="373" r="2"/><circle cx="1280" cy="591" r="2"/><circle cx="1303" cy="594" r="2"/>
+  </g>
+
+  <!-- Red practical lighting, with soft wall spill and slim bright cores. -->
+  <ellipse cx="591" cy="532" rx="207" ry="223" fill="url(#redGlow)" opacity=".5"/>
+  <ellipse cx="1219" cy="534" rx="201" ry="226" fill="url(#redGlow)" opacity=".5"/>
+  <ellipse cx="209" cy="603" rx="185" ry="296" fill="url(#redGlow)" opacity=".32"/>
+  <ellipse cx="1607" cy="613" rx="181" ry="295" fill="url(#redGlow)" opacity=".34"/>
+  <g stroke="#ef2c1d" stroke-width="10" opacity=".55" filter="url(#lightBlur)">
+    <path d="m468 363-1 306m869-319 6 317M192 282l-11 530m1442-535 17 531m-934-381v152m407-152 1 152"/>
+  </g>
+  <g stroke="#fc3323" stroke-width="3">
+    <path d="m468 363-1 306m869-319 6 317M192 282l-11 530m1442-535 17 531m-934-381v152m407-152 1 152"/>
+  </g>
+  <g stroke="#ff8b64" stroke-width=".8" opacity=".75">
+    <path d="m468 363-1 306m869-319 6 317M192 282l-11 530m1442-535 17 531m-934-381v152m407-152 1 152"/>
+  </g>
+  <path d="M749 552h311" stroke="#d5271c" stroke-width="3" opacity=".65"/>
+  <path d="M749 552h311" stroke="#f93422" stroke-width="9" opacity=".35" filter="url(#lightBlur)"/>
+
+  <!-- Uneven floor joints and faint, stretched reflections. -->
+  <g stroke="#080b0c" stroke-opacity=".65" stroke-width="2">
+    <path d="M95 1100 803 582m384 518L961 582m740 518-679-518M585 1100l286-518M0 949h1800M229 820h1342M457 705h887M587 641h626"/>
+    <path d="m106 1007 56-13 39 8 35-12 32 11m986-115 48-8 25 14 56-5m-631-135 31-5 35 11 31-3m-311 102 34-9 21 15 26 4"/>
+  </g>
+  <g stroke="#6f6963" stroke-opacity=".08">
+    <path d="M0 953h1800M229 823h1342M457 708h887M589 643h624"/>
+  </g>
+  <path d="m459 674-124 426h100l41-426Z" fill="url(#reflection)" opacity=".38"/>
+  <path d="m1330 674 51 426h105l-142-426Z" fill="url(#reflection)" opacity=".38"/>
+  <path d="m177 815-84 285h99l-2-285Z" fill="url(#reflection)" opacity=".34"/>
+  <path d="m1637 815 17 285h106l-111-285Z" fill="url(#reflection)" opacity=".34"/>
+  <path d="m707 581-38 140h17l25-140m406 0 25 140h16l-37-140" fill="url(#reflection)" opacity=".45"/>
+  <ellipse cx="903" cy="626" rx="544" ry="173" fill="url(#redHaze)" opacity=".68" filter="url(#fog)"/>
+  <ellipse cx="1192" cy="742" rx="458" ry="129" fill="url(#redHaze)" opacity=".46" filter="url(#blur)"/>
+  <ellipse cx="439" cy="741" rx="336" ry="121" fill="url(#redHaze)" opacity=".34" filter="url(#blur)"/>
+  <path d="M0 0h1800v1100H0z" fill="url(#topShade)"/>
+  <path d="M0 0h1800v1100H0z" fill="url(#vignette)"/>
+  <path d="M0 0h1800v1100H0z" fill="transparent" filter="url(#grain)" opacity=".55"/>
+</svg>
