@@ -150,33 +150,76 @@
   window.addEventListener("resize", updateArtistControls);
   updateArtistControls();
 
-  const ticketButton = document.getElementById("ticket-button");
-  const dialog = document.getElementById("ticket-dialog");
-  ticketButton.addEventListener("click", () => {
-    dialog.showModal();
-    document.body.classList.add("dialog-open");
-  });
-  document
-    .getElementById("dialog-close")
-    .addEventListener("click", () => dialog.close());
-  document
-    .getElementById("dialog-confirm")
-    .addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", (event) => {
-    if (event.target !== dialog || event.detail === 0) return;
-    const bounds = dialog.getBoundingClientRect();
-    if (
-      event.clientX < bounds.left ||
-      event.clientX > bounds.right ||
-      event.clientY < bounds.top ||
-      event.clientY > bounds.bottom
-    )
-      dialog.close();
-  });
-  dialog.addEventListener("close", () => {
-    document.body.classList.remove("dialog-open");
-    ticketButton.focus({ preventScroll: true });
-  });
+  // Only confirmed external destinations enable actions. No payment runs here.
+  const config = window.PARLADOR_CONFIG || {};
+  function externalUrl(value, telegram = false) {
+    if (typeof value !== "string" || !value.trim()) return null;
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" || url.username || url.password) return null;
+      if (telegram && !["t.me", "telegram.me"].includes(url.hostname)) return null;
+      if (telegram && url.pathname === "/") return null;
+      return url.href;
+    } catch { return null; }
+  }
+  function activateLink(linkId, disabledId, url) {
+    if (!url) return;
+    const link = document.getElementById(linkId);
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.hidden = false;
+    document.getElementById(disabledId).hidden = true;
+  }
+  const ticketUrl = externalUrl(config.tickets?.platformUrl);
+  activateLink("ticket-buy", "ticket-unavailable", ticketUrl);
+  if (ticketUrl) {
+    document.getElementById("ticket-status").textContent = "TICKETS AVAILABLE";
+    document.getElementById("event-ticket-status").textContent = "AVAILABLE";
+    document.getElementById("ticket-message").textContent =
+      "Билеты доступны на билетной платформе. Покупка откроется в новой вкладке.";
+    const categories = document.getElementById("ticket-categories");
+    const entries = Array.isArray(config.tickets?.categories) ? config.tickets.categories : [];
+    entries.forEach((category) => {
+      if (!category || typeof category.name !== "string" || !category.name.trim()) return;
+      const row = document.createElement("div");
+      row.className = "ticket-category";
+      const name = document.createElement("span");
+      name.textContent = category.name;
+      row.appendChild(name);
+      if (typeof category.priceLabel === "string" && category.priceLabel.trim()) {
+        const price = document.createElement("span");
+        price.textContent = category.priceLabel;
+        row.appendChild(price);
+      }
+      categories.appendChild(row);
+    });
+    categories.hidden = !categories.children.length;
+  }
+  const telegramUrl = externalUrl(config.community?.telegramUrl, true);
+  activateLink("telegram-join", "telegram-unavailable", telegramUrl);
+  if (telegramUrl) document.getElementById("telegram-message").textContent =
+    "Анонсы и новости PARLADOR — в нашем Telegram. Канал откроется в новой вкладке.";
+
+  if ("IntersectionObserver" in window && !motion.matches) {
+    const reveal = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        reveal.unobserve(entry.target);
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".ticket-panel, .community-copy").forEach((element) => {
+      element.classList.add("phase-reveal");
+      reveal.observe(element);
+    });
+    motion.addEventListener("change", () => {
+      if (motion.matches) {
+        document.querySelectorAll(".phase-reveal").forEach((element) => element.classList.add("is-visible"));
+        reveal.disconnect();
+      }
+    });
+  }
 
   if ("IntersectionObserver" in window) {
     const links = [...document.querySelectorAll(".desktop-nav a")];
@@ -185,7 +228,6 @@
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           let id = entry.target.id;
-          if (id === "event") id = "tickets";
           links.forEach((link) => {
             const active = link.hash === `#${id}`;
             link.classList.toggle("active", active);
@@ -196,8 +238,9 @@
       },
       { rootMargin: "-15% 0px -55% 0px" },
     );
-    ["home", "lineup", "manifesto", "event"].forEach((id) =>
+    ["home", "lineup", "manifesto", "tickets", "community"].forEach((id) =>
       observer.observe(document.getElementById(id)),
     );
   }
 })();
+
