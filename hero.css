@@ -1,0 +1,145 @@
+/* Atmosphere stays behind the existing Hero; only its own canvas is clipped. */
+.hero-shell .hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+  opacity: 1;
+}
+.hero-shell:before {
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-shell .hero { z-index: 2; }
+
+.hero-atmosphere > span {
+  position: absolute;
+  inset: -5%;
+  pointer-events: none;
+}
+.hero-atmosphere .hero-light {
+  background:
+    radial-gradient(ellipse at 79% 38%, rgba(236, 0, 11, .24), transparent 51%),
+    radial-gradient(ellipse at 52% 83%, rgba(136, 0, 7, .14), transparent 48%);
+  opacity: .45;
+}
+.hero-atmosphere .hero-fog-far {
+  background:
+    radial-gradient(ellipse 53% 15% at 68% 49%, rgba(154, 160, 168, .19), transparent 78%),
+    radial-gradient(ellipse 36% 25% at 84% 70%, rgba(130, 139, 148, .13), transparent 76%),
+    radial-gradient(ellipse 42% 19% at 29% 76%, rgba(139, 147, 157, .12), transparent 80%);
+  opacity: .44;
+}
+.hero-atmosphere .hero-fog-near {
+  background:
+    radial-gradient(ellipse 60% 19% at 41% 81%, rgba(158, 162, 169, .18), transparent 79%),
+    radial-gradient(ellipse 39% 21% at 87% 57%, rgba(150, 155, 163, .14), transparent 80%);
+  opacity: .32;
+}
+
+/* Fully visible defaults also cover browsers without animation/media support. */
+.hero-shell .hero > .hero-eyebrow,
+.hero-shell .hero > h1,
+.hero-shell .hero > .hero-tagline,
+.hero-shell .hero > .next-session,
+.hero-shell .hero > .enter-button {
+  animation: none;
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-shell .hero-atmosphere {
+    animation: hero-atmosphere-enter 1.15s .1s ease-out both;
+  }
+  .hero-atmosphere .hero-light {
+    animation: hero-light-breathe 26s 1.25s ease-in-out infinite alternate;
+  }
+  .hero-atmosphere .hero-fog-far {
+    animation: hero-fog-distance 48s 1.25s ease-in-out infinite alternate both;
+  }
+  .hero-atmosphere .hero-fog-near {
+    animation: hero-fog-foreground 64s 1.25s ease-in-out infinite alternate both;
+  }
+  .hero-shell .hero > h1 {
+    animation: hero-logo-enter 1.1s .4s cubic-bezier(.2, .65, .3, 1) both;
+  }
+  .hero-shell .hero > .hero-eyebrow,
+  .hero-shell .hero > .hero-tagline,
+  .hero-shell .hero > .next-session {
+    animation: hero-details-enter .85s .85s ease-out both;
+  }
+  .hero-shell .hero > .enter-button {
+    animation: hero-details-enter .85s 1.1s ease-out both;
+  }
+}
+
+@keyframes hero-atmosphere-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes hero-light-breathe {
+  from { opacity: .45; }
+  to { opacity: .57; }
+}
+@keyframes hero-fog-distance {
+  from { transform: translate3d(-1.2%, .3%, 0); }
+  to { transform: translate3d(1.2%, -.3%, 0); }
+}
+@keyframes hero-fog-foreground {
+  from { transform: translate3d(1.5%, .4%, 0); }
+  to { transform: translate3d(-1.5%, -.4%, 0); }
+}
+@keyframes hero-logo-enter {
+  from { opacity: 0; translate: 0 5px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes hero-details-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .hero-atmosphere .hero-fog-far { display: none; }
+  .hero-atmosphere .hero-fog-near { opacity: .2; }
+  .hero-atmosphere .hero-light { opacity: .32; }
+  @keyframes hero-light-breathe {
+    from { opacity: .32; }
+    to { opacity: .39; }
+  }
+  @keyframes hero-fog-foreground {
+    from { transform: translate3d(.45%, .15%, 0); }
+    to { transform: translate3d(-.45%, -.15%, 0); }
+  }
+}
+
+/* Keyboard users can act immediately instead of waiting for the intro. */
+.hero-shell .hero:focus-within > * {
+  animation: none;
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-shell .hero-atmosphere,
+  .hero-atmosphere > span,
+  .hero-shell .hero > * {
+    animation: none !important;
+  }
+  .hero-atmosphere > span { transform: none; }
+  .hero-shell .hero-atmosphere,
+  .hero-shell .hero > * {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media print {
+  .hero-shell .hero-atmosphere { display: none; }
+  .hero-shell .hero > * {
+    animation: none !important;
+    opacity: 1;
+    translate: 0 0;
+  }
+}
