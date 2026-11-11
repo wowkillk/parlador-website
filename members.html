@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="members.css">
   <script src="auth-config.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+  <script src="community-ui.js" defer></script>
   <script src="members.js" defer></script>
 </head>
 <body>
@@ -22,11 +23,15 @@
       <section class="panel" aria-labelledby="profile-title">
         <p class="eyebrow">01 / MY COMMUNITY PROFILE</p>
         <h2 id="profile-title">ТВОЙ ПРОФИЛЬ</h2>
-        <p class="hint">Ты сам решаешь, показывать ли профиль другим участникам. Email и данные входа никогда не публикуются. Приватная аватарка пока не отображается в каталоге.</p>
+        <p class="hint">Ты сам решаешь, показывать ли профиль другим участникам. Email и данные входа никогда не публикуются. Аватарка из личного аккаунта остаётся закрытой, пока ты сам не выберешь её для сообщества.</p>
         <form id="profile-form">
           <label for="display-name">ИМЯ В СООБЩЕСТВЕ</label><input id="display-name" name="display-name" maxlength="60" minlength="2" required>
           <label for="nickname">НИКНЕЙМ</label><input id="nickname" name="nickname" maxlength="32" pattern="[A-Za-z0-9_-]{0,32}" placeholder="KALASHNIKOV">
           <label for="bio">О СЕБЕ</label><textarea id="bio" name="bio" maxlength="280" rows="3" placeholder="Музыка, город, интересы…"></textarea>
+          <div class="avatar-editor"><div id="my-community-avatar" class="community-avatar community-avatar-large">P.</div><div><label for="community-avatar-file">ФОТО ДЛЯ СООБЩЕСТВА (JPG, PNG, WEBP, ДО 5 МБ)</label><input id="community-avatar-file" type="file" accept="image/jpeg,image/png,image/webp"><button id="reuse-private-avatar" type="button" class="secondary-action">ВЗЯТЬ ФОТО ИЗ МОЕГО АККАУНТА</button><p class="hint">Перенос фотографии происходит только по твоему нажатию. Фото будут видеть авторизованные участники, если ты опубликуешь профиль.</p></div></div>
+          <label for="instagram">INSTAGRAM / НИКНЕЙМ</label><input id="instagram" name="instagram" maxlength="50" placeholder="dj.kalashnikov_">
+          <label for="telegram">TELEGRAM / НИКНЕЙМ</label><input id="telegram" name="telegram" maxlength="50" placeholder="djkalashnikov">
+          <label for="soundcloud">SOUNDCLOUD / HTTPS ССЫЛКА</label><input id="soundcloud" name="soundcloud" maxlength="200" type="url" placeholder="https://soundcloud.com/...">
           <label class="check"><input id="listed" type="checkbox"><span>Показывать мой профиль участникам PARLADOR</span></label>
           <button id="save-profile" type="submit">СОХРАНИТЬ ПРОФИЛЬ</button>
         </form>
