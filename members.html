@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#080808">
+  <title>PARLADOR / MEMBERS</title>
+  <link rel="stylesheet" href="members.css">
+  <script src="auth-config.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+  <script src="members.js" defer></script>
+</head>
+<body>
+  <header class="bar"><a href="./">PARLADOR<span>.</span></a><span>MEMBERS / COMMUNITY</span><a href="./">← НА САЙТ</a></header>
+  <main>
+    <p class="eyebrow">● MEMBERS ONLY / NO COMPROMISE</p>
+    <h1>THE<br>COMMUNITY<span>.</span></h1>
+    <section id="guest" hidden><p>Профили доступны только авторизованным участникам PARLADOR.</p><a class="action" href="./">ВОЙТИ НА САЙТЕ</a></section>
+    <p id="loading" role="status">Проверяем доступ…</p>
+    <section id="members-area" hidden>
+      <section class="panel" aria-labelledby="profile-title">
+        <p class="eyebrow">01 / MY COMMUNITY PROFILE</p>
+        <h2 id="profile-title">ТВОЙ ПРОФИЛЬ</h2>
+        <p class="hint">Ты сам решаешь, показывать ли профиль другим участникам. Email и данные входа никогда не публикуются. Приватная аватарка пока не отображается в каталоге.</p>
+        <form id="profile-form">
+          <label for="display-name">ИМЯ В СООБЩЕСТВЕ</label><input id="display-name" name="display-name" maxlength="60" minlength="2" required>
+          <label for="nickname">НИКНЕЙМ</label><input id="nickname" name="nickname" maxlength="32" pattern="[A-Za-z0-9_-]{0,32}" placeholder="KALASHNIKOV">
+          <label for="bio">О СЕБЕ</label><textarea id="bio" name="bio" maxlength="280" rows="3" placeholder="Музыка, город, интересы…"></textarea>
+          <label class="check"><input id="listed" type="checkbox"><span>Показывать мой профиль участникам PARLADOR</span></label>
+          <button id="save-profile" type="submit">СОХРАНИТЬ ПРОФИЛЬ</button>
+        </form>
+      </section>
+      <section class="directory" aria-labelledby="list-title"><p class="eyebrow">02 / PEOPLE</p><h2 id="list-title">УЧАСТНИКИ<span>.</span></h2><p id="list-state" class="hint">Загружаем участников…</p><div id="member-list" class="member-grid"></div></section>
+    </section>
+    <p id="feedback" role="status" aria-live="polite"></p>
+  </main>
+  <footer>PARLADOR / ONE COMMUNITY / NO COMPROMISE</footer>
+</body>
+</html>
