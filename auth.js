@@ -43,7 +43,22 @@
       </form>
     </div>
     <div class="auth-member" hidden>
-      <p class="auth-signed-in"></p>
+      <div class="member-card">
+        <p class="member-tag">● PARLADOR MEMBER / 001</p>
+        <div class="member-identity">
+          <div class="member-avatar" aria-hidden="true"><img class="member-avatar-image" alt="" hidden><span class="member-initial">P</span></div>
+          <div class="member-identity-copy">
+            <p class="member-name">PARLADOR MEMBER</p>
+            <p class="member-email"></p>
+          </div>
+        </div>
+        <dl class="member-details">
+          <div><dt>ACCESS VIA</dt><dd class="member-provider">—</dd></div>
+          <div><dt>MEMBER SINCE</dt><dd class="member-since">—</dd></div>
+          <div><dt>STATUS</dt><dd class="member-status">ACTIVE</dd></div>
+        </dl>
+        <p class="member-footer">ONE COMMUNITY / NO COMPROMISE</p>
+      </div>
       <button class="auth-signout" type="button">SIGN OUT</button>
     </div>
     <p class="auth-message" role="status" aria-live="polite"></p>`;
@@ -52,7 +67,13 @@
   const closeButton = dialog.querySelector(".auth-close");
   const guest = dialog.querySelector(".auth-guest");
   const member = dialog.querySelector(".auth-member");
-  const memberName = dialog.querySelector(".auth-signed-in");
+  const memberName = dialog.querySelector(".member-name");
+  const memberEmail = dialog.querySelector(".member-email");
+  const memberProvider = dialog.querySelector(".member-provider");
+  const memberSince = dialog.querySelector(".member-since");
+  const memberInitial = dialog.querySelector(".member-initial");
+  const memberAvatar = dialog.querySelector(".member-avatar-image");
+  const authHeading = dialog.querySelector(".auth-heading");
   const message = dialog.querySelector(".auth-message");
   const google = dialog.querySelector(".google");
   const telegram = dialog.querySelector(".telegram");
@@ -71,9 +92,35 @@
     guest.hidden = Boolean(user);
     member.hidden = !user;
     entry.textContent = user ? "MY ACCOUNT" : "ACCOUNT";
-    memberName.textContent = user
-      ? "Выполнен вход: " + (user.email || "участник PARLADOR") : "";
-    if (user) showStatus("Ты внутри PARLADOR.");
+    authHeading.hidden = Boolean(user);
+    if (user) {
+      const meta = user.user_metadata || {};
+      const name = [meta.full_name, meta.name, meta.user_name, meta.username, user.email?.split("@")[0]]
+        .find(value => typeof value === "string" && value.trim()) || "PARLADOR MEMBER";
+      memberName.textContent = name.slice(0, 80);
+      memberEmail.textContent = user.email || "Email не указан";
+      const providers = Array.isArray(user.app_metadata?.providers) ? user.app_metadata.providers : [];
+      const currentProvider = user.app_metadata?.provider || providers[0] || "";
+      memberProvider.textContent = currentProvider === "google" ? "GOOGLE"
+        : currentProvider === "email" ? "EMAIL"
+        : currentProvider.includes("telegram") ? "TELEGRAM" : "PARLADOR";
+      const joined = user.created_at ? new Date(user.created_at) : null;
+      memberSince.textContent = joined && !Number.isNaN(joined.getTime())
+        ? new Intl.DateTimeFormat("ru-RU", {day:"2-digit",month:"short",year:"numeric"}).format(joined)
+        : "—";
+      memberInitial.textContent = name.trim().charAt(0).toUpperCase();
+      const rawAvatar = meta.avatar_url || meta.picture;
+      let safeAvatar = null;
+      try {
+        const url = new URL(rawAvatar);
+        if (url.protocol === "https:" && !url.username && !url.password) safeAvatar = url.href;
+      } catch {}
+      memberAvatar.hidden = !safeAvatar;
+      memberInitial.hidden = Boolean(safeAvatar);
+      if (safeAvatar) memberAvatar.src = safeAvatar;
+      else memberAvatar.removeAttribute("src");
+      showStatus("Ты внутри PARLADOR.");
+    }
     else if (!client) showStatus("Вход готовится к запуску. Сайт открыт для всех.");
     else showStatus("Вход добровольный. Сайт доступен и без аккаунта.");
   }
