@@ -52,7 +52,7 @@
             <input class="member-avatar-input" type="file" id="member-avatar-file" accept="image/jpeg,image/png,image/webp">
           </div>
           <div class="member-identity-copy">
-            <p class="member-name">PARLADOR MEMBER</p>
+            <div class="member-name-row"><p class="member-name">PARLADOR MEMBER</p><span class="member-verified" hidden title="PARLADOR VERIFIED" aria-label="Проверенный участник PARLADOR"><svg viewBox="0 0 24 24" width="25" height="25" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 1.5 14.7 3l3.08-.12 1.42 2.75 2.7 1.5-.16 3.08L23 12l-1.26 2.79.16 3.08-2.7 1.5-1.42 2.75L14.7 22 12 23.5 9.3 22l-3.08.12-1.42-2.75-2.7-1.5.16-3.08L1 12l1.26-2.79-.16-3.08 2.7-1.5 1.42-2.75L9.3 3z"/><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="m7.5 12.2 3 3 6-6"/></svg></span></div>
             <p class="member-nickname" hidden></p>
             <p class="member-email"></p>
           </div>
@@ -86,6 +86,8 @@
   const member = dialog.querySelector(".auth-member");
   const memberName = dialog.querySelector(".member-name");
   const memberEmail = dialog.querySelector(".member-email");
+  const verifiedBadge = dialog.querySelector(".member-verified");
+  let verificationRequest = 0;
   const nicknameLabel = dialog.querySelector(".member-nickname");
   const editToggle = dialog.querySelector(".member-edit-toggle");
   const editForm = dialog.querySelector(".member-edit-form");
@@ -115,6 +117,8 @@
   function showStatus(text) { message.textContent = text; }
   function render(session) {
     const user = session?.user;
+    const currentVerificationRequest = ++verificationRequest;
+    verifiedBadge.hidden = true;
     guest.hidden = Boolean(user);
     member.hidden = !user;
     if (!user) {
@@ -139,6 +143,15 @@
         editNickname.value = nickname;
       }
       memberEmail.textContent = user.email || "Email не указан";
+      // Verification is controlled by a protected database table, never by editable metadata.
+      if (client) {
+        client.from("member_verifications").select("user_id").eq("user_id", user.id).maybeSingle()
+          .then(({ data, error }) => {
+            if (currentVerificationRequest !== verificationRequest ||
+                member.dataset.userId !== user.id) return;
+            if (!error && data?.user_id === user.id) verifiedBadge.hidden = false;
+          }).catch(err => console.warn("PARLADOR verification unavailable", err));
+      }
       const providers = Array.isArray(user.app_metadata?.providers) ? user.app_metadata.providers : [];
       const currentProvider = user.app_metadata?.provider || providers[0] || "";
       memberProvider.textContent = currentProvider === "google" ? "GOOGLE"
