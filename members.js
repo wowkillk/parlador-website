@@ -42,6 +42,12 @@
         bio.className = "bio"; bio.textContent = p.bio;
         article.appendChild(bio);
       }
+      const link = document.createElement("a");
+      link.className = "person-link";
+      link.href = "profile.html?id=" + encodeURIComponent(p.user_id);
+      link.textContent = "ОТКРЫТЬ ПРОФИЛЬ →";
+      link.setAttribute("aria-label", "Открыть профиль " + p.display_name);
+      article.appendChild(link);
       list.appendChild(article);
     }
   }
