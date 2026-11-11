@@ -9,7 +9,7 @@
       }) : null;
   const googleEnabled = Boolean(client && cfg.providers?.google);
   const emailEnabled = Boolean(client && cfg.providers?.email);
-  // Telegram is intentionally unavailable until a verified server-side login flow is implemented.
+  const telegramEnabled = Boolean(client && cfg.providers?.telegram);
   const header = document.querySelector(".header");
   if (!header) return;
   const entry = document.createElement("button");
@@ -31,9 +31,8 @@
     <div class="auth-guest">
       <div class="auth-actions">
         <button type="button" class="auth-provider google">CONTINUE WITH GOOGLE</button>
-        <button type="button" class="auth-provider telegram" disabled aria-describedby="telegram-note">CONTINUE WITH TELEGRAM</button>
+        <button type="button" class="auth-provider telegram">CONTINUE WITH TELEGRAM</button>
       </div>
-      <p class="auth-telegram-note" id="telegram-note">Telegram: скоро появится</p>
       <form class="auth-email-form">
         <label for="auth-email">CONTINUE WITH EMAIL</label>
         <div class="auth-email-row">
@@ -56,11 +55,13 @@
   const memberName = dialog.querySelector(".auth-signed-in");
   const message = dialog.querySelector(".auth-message");
   const google = dialog.querySelector(".google");
+  const telegram = dialog.querySelector(".telegram");
   const emailForm = dialog.querySelector(".auth-email-form");
   const emailInput = dialog.querySelector("#auth-email");
   const emailSubmit = dialog.querySelector(".auth-email-submit");
   const signout = dialog.querySelector(".auth-signout");
   google.disabled = !googleEnabled;
+  telegram.disabled = !telegramEnabled;
   emailInput.disabled = !emailEnabled;
   emailSubmit.disabled = !emailEnabled;
 
@@ -100,6 +101,21 @@
       showStatus("Не удалось начать вход через Google. Попробуй позже.");
       console.error("PARLADOR Google auth:", err);
       google.disabled = false;
+    }
+  });
+  telegram.addEventListener("click", async () => {
+    if (!telegramEnabled) return;
+    telegram.disabled = true;
+    showStatus("Перенаправляем в Telegram…");
+    try {
+      const { error } = await client.auth.signInWithOAuth({
+        provider: "custom:telegram", options: { redirectTo }
+      });
+      if (error) throw error;
+    } catch (err) {
+      showStatus("Не удалось начать вход через Telegram. Попробуй позже.");
+      console.error("PARLADOR Telegram auth:", err);
+      telegram.disabled = false;
     }
   });
   emailForm.addEventListener("submit", async event => {
