@@ -26,7 +26,7 @@ ALTER TABLE public.member_profiles
 -- Avoid granting edits to the generated membership number.
 REVOKE UPDATE ON public.member_profiles FROM authenticated;
 GRANT SELECT, INSERT, DELETE ON public.member_profiles TO authenticated;
-GRANT UPDATE (display_name, nickname, bio, is_listed, avatar_path,
+GRANT UPDATE (user_id, display_name, nickname, bio, is_listed, avatar_path,
   instagram, telegram, soundcloud, updated_at)
   ON public.member_profiles TO authenticated;
 
