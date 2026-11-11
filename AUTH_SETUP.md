@@ -1,20 +1,22 @@
-# PARLADOR optional sign-in
+# PARLADOR optional sign-in (Google / Email / Telegram planned)
 
-Public content remains accessible. Account dialog is an optional entry point.
+The public PARLADOR site remains accessible without login. Auth is currently previewed on a separate GitHub Pages repo.
 
-## Setup (owner actions)
+## Implemented
+- Google OAuth through Supabase (configured; tested with an allowlisted test user).
+- Email magic-link through Supabase Auth signInWithOtp (requires email provider and template settings, mail delivery tests).
+- Telegram button is visibly disabled. It is **not** a login mechanism yet.
+- Apple login removed.
 
-1. Create a project at https://supabase.com/dashboard
-2. Copy **Project URL** and **publishable key** (or legacy **anon** key) from Project Settings > API into `auth-config.js`. These are designed for browser use. **NEVER** paste service_role keys, OAuth client secrets, or Apple private keys into GitHub.
-3. In Supabase Authentication > URL Configuration set:
-   - Site URL: `https://wowkillk.github.io/parlador-website/`
-   - Redirect URLs: `https://wowkillk.github.io/parlador-website/`
-4. To enable Google: follow https://supabase.com/docs/guides/auth/social-sign-in/auth-google ; set the Google OAuth redirect URI to `https://YOUR-PROJECT.supabase.co/auth/v1/callback` in Google Cloud, enter client ID and secret in Supabase Authentication > Providers > Google; then set `providers.google = true` in `auth-config.js`.
-5. To enable Apple: follow https://supabase.com/docs/guides/auth/social-sign-in/auth-apple ; Apple Developer Program, Service ID and signing key are required. Configure the Supabase OAuth callback in Apple developer settings, enter credentials *only* in Supabase, then set `providers.apple = true`.
-6. Test on the deployed HTTPS GitHub Pages site with a test account; check sign-in, refresh, sign-out, phone width, and both providers separately.
+## Supabase setup
+1. Set URL and publishable key in `auth-config.js` (browser-safe only). Never commit service_role, secret keys, OAuth secrets, or bot tokens.
+2. Authentication > URL Configuration: allow exact return URLs for both `https://wowkillk.github.io/parlador-website/` and `https://wowkillk.github.io/parlador-auth-test/`.
+3. Google OAuth provider: Client ID and secret remain solely in Supabase; Google Cloud must permit Supabase callback URI.
+4. Authentication > Providers > Email: enable email sign-in and ensure the confirmation/magic-link template is suitable for PKCE or implicit-flow redirect as configured. Confirm `{{ .ConfirmationURL }}` is used as the login link. Test that clicked links establish a session on the preview domain.
+5. Supabase built-in email service has strict sending/rate limits and is unsuitable for broad public release; configure custom SMTP, sender domain and appropriate deliverability before launch. Check abuse/rate limits and consent/privacy notices.
+6. For Telegram, a future verified implementation needs Telegram Login (bot and allowed origin) and **server-side verification of the signed identity**, plus a trusted session exchange. Never trust Telegram user IDs supplied from browser code or expose a bot token in GitHub Pages.
+7. Rotate the previously screenshot-exposed Google OAuth Client Secret before publicly releasing social login.
 
-The providers stay disabled until configured. No member-specific privileged data or custom profiles are stored. GitHub Pages is public; front-end UI is **not** access control. Protect any future private data with Supabase Row Level Security (RLS) policies.
+To test: deploy preview from `codex/parlador-optional-auth`, sign in via Google, refresh, sign out, request email link, click link on same browser, verify session; then test on Safari/iPhone.
 
-The browser implementation depends on supabase-js v2 UMD CDN. A production bundling step can pin and self-host that library later.
-
-**Caveat:** The Apple OAuth client secret needs periodic rotation, per Apple/Supabase guidance.
+Important: static front-end UI does not protect data. Apply RLS to any future user data. No protected user-profile database is added by this change.
