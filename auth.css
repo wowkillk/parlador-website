@@ -26,3 +26,21 @@
 .auth-signed-in{font:15px/1.5 Arial,sans-serif;margin-bottom:20px;overflow-wrap:anywhere}
 @media(max-width:820px){.auth-entry{margin-left:auto;margin-right:12px;padding:8px;font-size:11px}.auth-dialog{padding:20px}.auth-heading{margin-top:26px}}
 @media(prefers-reduced-motion:reduce){.auth-dialog::backdrop{backdrop-filter:none}}
+
+/* First version of PARLADOR MEMBER: reads only the authenticated Supabase session. */
+.member-card{border:1px solid #595959;background:linear-gradient(155deg,#1b1b1b,#080808 68%);padding:18px;margin:10px 0 16px;min-width:0}
+.member-tag{color:#ff4650;font:600 11px/1.4 var(--label,Arial,sans-serif);letter-spacing:.17em;margin:0 0 25px}
+.member-identity{display:flex;gap:14px;align-items:center;min-width:0}
+.member-avatar{width:64px;height:64px;flex:none;background:#ec000b;display:grid;place-items:center;border:1px solid #fc434e;overflow:hidden;color:#fff;font:600 30px var(--display,Arial,sans-serif)}
+.member-avatar-image{width:100%;height:100%;object-fit:cover}
+.member-avatar-image[hidden],.member-initial[hidden]{display:none}
+.member-identity-copy{min-width:0}
+.member-name{font:600 clamp(19px,5vw,25px)/1.15 var(--display,Arial,sans-serif);overflow-wrap:anywhere}
+.member-email{color:#aaa;font:13px/1.45 Arial,sans-serif;overflow-wrap:anywhere;margin-top:7px}
+.member-details{display:grid;grid-template-columns:1fr 1fr;gap:17px 12px;padding:23px 0;margin:23px 0 0;border-top:1px solid #555}
+.member-details>div{min-width:0}
+.member-details dt{font:600 10px/1.5 var(--label,Arial,sans-serif);color:#aaa;letter-spacing:.17em}
+.member-details dd{font:600 15px/1.4 Arial,sans-serif;color:#fff;margin:4px 0 0;overflow-wrap:anywhere}
+.member-details .member-status{color:#ff4650}
+.member-footer{border-top:1px solid #444;padding-top:15px;font:600 11px/1.4 var(--label,Arial,sans-serif);letter-spacing:.15em;color:#bbb}
+@media(max-width:420px){.member-card{padding:14px}.member-avatar{width:52px;height:52px}.member-details{gap:13px}}
