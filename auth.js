@@ -46,7 +46,11 @@
       <div class="member-card">
         <p class="member-tag">● PARLADOR MEMBER / 001</p>
         <div class="member-identity">
-          <div class="member-avatar" aria-hidden="true"><img class="member-avatar-image" alt="" hidden><span class="member-initial">P</span></div>
+          <div class="member-avatar-wrap">
+            <div class="member-avatar" aria-hidden="true"><img class="member-avatar-image" alt="" hidden><span class="member-initial">P</span></div>
+            <label class="member-avatar-upload" for="member-avatar-file">ЗАГРУЗИТЬ ФОТО</label>
+            <input class="member-avatar-input" type="file" id="member-avatar-file" accept="image/jpeg,image/png,image/webp">
+          </div>
           <div class="member-identity-copy">
             <p class="member-name">PARLADOR MEMBER</p>
             <p class="member-email"></p>
@@ -73,6 +77,8 @@
   const memberSince = dialog.querySelector(".member-since");
   const memberInitial = dialog.querySelector(".member-initial");
   const memberAvatar = dialog.querySelector(".member-avatar-image");
+  const avatarInput = dialog.querySelector(".member-avatar-input");
+  const avatarUpload = dialog.querySelector(".member-avatar-upload");
   const authHeading = dialog.querySelector(".auth-heading");
   const message = dialog.querySelector(".auth-message");
   const google = dialog.querySelector(".google");
@@ -91,6 +97,8 @@
     const user = session?.user;
     guest.hidden = Boolean(user);
     member.hidden = !user;
+    member.dataset.userId = user?.id || "";
+    member.dataset.avatarPath = user?.user_metadata?.parlador_avatar_path || "";
     entry.textContent = user ? "MY ACCOUNT" : "ACCOUNT";
     authHeading.hidden = Boolean(user);
     if (user) {
@@ -115,10 +123,24 @@
         const url = new URL(rawAvatar);
         if (url.protocol === "https:" && !url.username && !url.password) safeAvatar = url.href;
       } catch {}
+      // OAuth avatars are fallback; uploaded member avatars are private files in Storage.
+      const avatarPath = typeof meta.parlador_avatar_path === "string" ? meta.parlador_avatar_path : "";
+      const expectedUser = user.id;
+      const expectedPath = avatarPath;
       memberAvatar.hidden = !safeAvatar;
       memberInitial.hidden = Boolean(safeAvatar);
       if (safeAvatar) memberAvatar.src = safeAvatar;
       else memberAvatar.removeAttribute("src");
+      if (avatarPath && avatarPath.startsWith(user.id + "/") && client) {
+        client.storage.from("member-avatars").createSignedUrl(avatarPath, 3600)
+          .then(({ data, error }) => {
+            if (error || !data?.signedUrl || member.dataset.userId !== expectedUser ||
+                member.dataset.avatarPath !== expectedPath) return;
+            memberAvatar.src = data.signedUrl;
+            memberAvatar.hidden = false;
+            memberInitial.hidden = true;
+          }).catch(err => console.error("PARLADOR avatar read:", err));
+      }
       showStatus("Ты внутри PARLADOR.");
     }
     else if (!client) showStatus("Вход готовится к запуску. Сайт открыт для всех.");
@@ -184,6 +206,54 @@
       console.error("PARLADOR email auth:", err);
     } finally {
       emailSubmit.disabled = false;
+    }
+  });
+  avatarInput.addEventListener("change", async () => {
+    const file = avatarInput.files?.[0];
+    if (!file || !client) return;
+    const extensions = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+    const ext = extensions[file.type];
+    if (!ext || file.size > 5 * 1024 * 1024 || file.size === 0) {
+      showStatus("Выбери JPG, PNG или WEBP до 5 МБ.");
+      avatarInput.value = "";
+      return;
+    }
+    avatarInput.disabled = true;
+    avatarUpload.textContent = "ЗАГРУЖАЕМ…";
+    showStatus("Загружаем аватар…");
+    try {
+      const { data: authData, error: authError } = await client.auth.getUser();
+      if (authError || !authData.user) throw authError || Error("Not signed in");
+      const user = authData.user;
+      const path = user.id + "/" + crypto.randomUUID() + "." + ext;
+      const { error: uploadError } = await client.storage.from("member-avatars").upload(path, file, {
+        contentType: file.type, upsert: false, cacheControl: "3600"
+      });
+      if (uploadError) throw uploadError;
+      const { data: updated, error: updateError } = await client.auth.updateUser({
+        data: { parlador_avatar_path: path }
+      });
+      if (updateError) {
+        await client.storage.from("member-avatars").remove([path]).catch(() => {});
+        throw updateError;
+      }
+      const { data: signed, error: signedError } = await client.storage
+        .from("member-avatars").createSignedUrl(path, 3600);
+      if (!signedError && signed?.signedUrl) {
+        member.dataset.userId = user.id;
+        member.dataset.avatarPath = path;
+        memberAvatar.src = signed.signedUrl;
+        memberAvatar.hidden = false;
+        memberInitial.hidden = true;
+      }
+      showStatus("Аватар сохранён в профиле PARLADOR.");
+    } catch (error) {
+      console.error("PARLADOR avatar upload:", error);
+      showStatus("Не удалось загрузить фото. Проверь настройки Storage и попробуй снова.");
+    } finally {
+      avatarInput.value = "";
+      avatarInput.disabled = false;
+      avatarUpload.textContent = "ЗАГРУЗИТЬ ФОТО";
     }
   });
   signout.addEventListener("click", async () => {
