@@ -67,3 +67,11 @@
 .member-edit-save{background:#ee2434;color:#fff;border-color:#ee2434}
 .member-edit-cancel{background:#111;color:#fff}
 .member-edit-save:disabled{opacity:.5;cursor:wait}
+
+/* PARLADOR VERIFIED is granted server-side in member_verifications. */
+.member-name-row{display:flex;align-items:center;gap:8px;min-width:0}
+.member-name-row .member-name{min-width:0}
+.member-verified{display:inline-flex;color:#25a8f2;flex:none;align-items:center;justify-content:center}
+.member-verified[hidden]{display:none}
+.member-verified svg{display:block;width:25px;height:25px}
+@media(max-width:420px){.member-name-row{gap:5px}.member-verified svg{width:21px;height:21px}}
