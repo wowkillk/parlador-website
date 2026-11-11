@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="profile.css">
 <script src="auth-config.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="community-ui.js" defer></script>
 <script src="profile.js" defer></script>
 </head>
 <body>
@@ -21,11 +22,11 @@
 <article id="profile-card" hidden class="profile-card">
   <p class="eyebrow">01 / COMMUNITY IDENTITY</p>
   <div class="profile-heading">
-    <div class="profile-mark" aria-hidden="true">P.</div>
-    <div><h2 id="profile-name"></h2><p id="profile-nickname" class="nick" hidden></p></div>
+    <div id="profile-avatar" class="profile-mark" aria-hidden="true">P.</div>
+    <div><div class="identity-heading"><h2 id="profile-name"></h2><span id="profile-verified-holder"></span></div><p id="profile-nickname" class="nick" hidden></p><p id="profile-id" class="member-id"></p></div>
   </div>
   <section class="profile-section"><p class="eyebrow">02 / ABOUT</p><p id="profile-bio"></p></section>
-  <section class="profile-section"><p class="eyebrow">03 / CONNECTIONS</p><p class="hint">Социальные сети появятся, когда участник добавит их в профиль.</p></section>
+  <section class="profile-section"><p class="eyebrow">03 / CONNECTIONS</p><div id="social-links" class="social-links"></div><p id="no-socials" class="hint">Участник пока не добавил социальные сети.</p></section>
   <section class="profile-section"><p class="eyebrow">04 / ACTIVITY</p><p class="hint">История событий и активность PARLADOR появятся позже.</p></section>
   <a class="action" href="members.html">← ВСЕ УЧАСТНИКИ</a>
 </article>
