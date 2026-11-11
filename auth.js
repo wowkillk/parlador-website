@@ -260,7 +260,7 @@
   editForm.addEventListener("submit", async event => {
     event.preventDefault();
     if (!client || !editForm.reportValidity()) return;
-    const displayName = editName.value.trim().replace(/\\s+/g, " ");
+    const displayName = editName.value.trim().replace(/\s+/g, " ");
     const nickname = editNickname.value.trim();
     if (displayName.length < 2 || displayName.length > 60 ||
         (nickname && !/^[A-Za-z0-9_-]{2,32}$/.test(nickname))) {
