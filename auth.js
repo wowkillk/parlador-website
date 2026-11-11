@@ -76,6 +76,7 @@
         </dl>
         <p class="member-footer">ONE COMMUNITY / NO COMPROMISE</p>
       </div>
+      <a class="auth-community-link" href="members.html">ОТКРЫТЬ COMMUNITY / ПРОФИЛИ УЧАСТНИКОВ →</a>
       <button class="auth-signout" type="button">SIGN OUT</button>
     </div>
     <p class="auth-message" role="status" aria-live="polite"></p>`;
