@@ -53,9 +53,22 @@
           </div>
           <div class="member-identity-copy">
             <p class="member-name">PARLADOR MEMBER</p>
+            <p class="member-nickname" hidden></p>
             <p class="member-email"></p>
           </div>
         </div>
+        <button type="button" class="member-edit-toggle" aria-expanded="false">РЕДАКТИРОВАТЬ ПРОФИЛЬ</button>
+        <form class="member-edit-form" hidden>
+          <label for="member-display-name">ИМЯ В ПРОФИЛЕ</label>
+          <input id="member-display-name" name="display-name" type="text" maxlength="60" autocomplete="nickname" required>
+          <label for="member-nickname">НИКНЕЙМ</label>
+          <input id="member-nickname" name="nickname" type="text" maxlength="32" placeholder="например, DJKALASHNIKOV" pattern="[A-Za-z0-9_\\-]{2,32}" title="2–32 символа: латинские буквы, цифры, _ или -">
+          <p class="member-edit-help">Никнейм необязателен. Можно использовать латиницу, цифры, _ и -.</p>
+          <div class="member-edit-actions">
+            <button class="member-edit-save" type="submit">СОХРАНИТЬ</button>
+            <button class="member-edit-cancel" type="button">ОТМЕНА</button>
+          </div>
+        </form>
         <dl class="member-details">
           <div><dt>ACCESS VIA</dt><dd class="member-provider">—</dd></div>
           <div><dt>MEMBER SINCE</dt><dd class="member-since">—</dd></div>
@@ -73,6 +86,13 @@
   const member = dialog.querySelector(".auth-member");
   const memberName = dialog.querySelector(".member-name");
   const memberEmail = dialog.querySelector(".member-email");
+  const nicknameLabel = dialog.querySelector(".member-nickname");
+  const editToggle = dialog.querySelector(".member-edit-toggle");
+  const editForm = dialog.querySelector(".member-edit-form");
+  const editName = dialog.querySelector("#member-display-name");
+  const editNickname = dialog.querySelector("#member-nickname");
+  const editSave = dialog.querySelector(".member-edit-save");
+  const editCancel = dialog.querySelector(".member-edit-cancel");
   const memberProvider = dialog.querySelector(".member-provider");
   const memberSince = dialog.querySelector(".member-since");
   const memberInitial = dialog.querySelector(".member-initial");
@@ -97,15 +117,27 @@
     const user = session?.user;
     guest.hidden = Boolean(user);
     member.hidden = !user;
+    if (!user) {
+      editForm.hidden = true;
+      editToggle.setAttribute("aria-expanded", "false");
+      editToggle.textContent = "РЕДАКТИРОВАТЬ ПРОФИЛЬ";
+    }
     member.dataset.userId = user?.id || "";
     member.dataset.avatarPath = user?.user_metadata?.parlador_avatar_path || "";
     entry.textContent = user ? "MY ACCOUNT" : "ACCOUNT";
     authHeading.hidden = Boolean(user);
     if (user) {
       const meta = user.user_metadata || {};
-      const name = [meta.full_name, meta.name, meta.user_name, meta.username, user.email?.split("@")[0]]
+      const name = [meta.parlador_display_name, meta.full_name, meta.name, meta.user_name, meta.username, user.email?.split("@")[0]]
         .find(value => typeof value === "string" && value.trim()) || "PARLADOR MEMBER";
       memberName.textContent = name.slice(0, 80);
+      const nickname = typeof meta.parlador_nickname === "string" ? meta.parlador_nickname : "";
+      nicknameLabel.textContent = nickname ? "@" + nickname : "";
+      nicknameLabel.hidden = !nickname;
+      if (editForm.hidden) {
+        editName.value = name.slice(0, 60);
+        editNickname.value = nickname;
+      }
       memberEmail.textContent = user.email || "Email не указан";
       const providers = Array.isArray(user.app_metadata?.providers) ? user.app_metadata.providers : [];
       const currentProvider = user.app_metadata?.provider || providers[0] || "";
@@ -207,6 +239,49 @@
     } finally {
       emailSubmit.disabled = false;
     }
+  });
+  function closeEditor() {
+    editForm.hidden = true;
+    editToggle.setAttribute("aria-expanded", "false");
+    editToggle.textContent = "РЕДАКТИРОВАТЬ ПРОФИЛЬ";
+  }
+  editToggle.addEventListener("click", () => {
+    if (!member.dataset.userId) return;
+    if (!editForm.hidden) { closeEditor(); return; }
+    editForm.hidden = false;
+    editToggle.setAttribute("aria-expanded", "true");
+    editToggle.textContent = "СКРЫТЬ РЕДАКТОР";
+    editName.focus();
+  });
+  editCancel.addEventListener("click", () => {
+    closeEditor();
+    if (client) client.auth.getSession().then(({ data }) => render(data.session)).catch(() => {});
+  });
+  editForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!client || !editForm.reportValidity()) return;
+    const displayName = editName.value.trim().replace(/\\s+/g, " ");
+    const nickname = editNickname.value.trim();
+    if (displayName.length < 2 || displayName.length > 60 ||
+        (nickname && !/^[A-Za-z0-9_-]{2,32}$/.test(nickname))) {
+      showStatus("Имя: 2–60 символов. Никнейм: 2–32 символа латиницей, цифры, _ или -.");
+      return;
+    }
+    editSave.disabled = true;
+    showStatus("Сохраняем изменения…");
+    try {
+      const { error } = await client.auth.updateUser({
+        data: { parlador_display_name: displayName, parlador_nickname: nickname }
+      });
+      if (error) throw error;
+      closeEditor();
+      const { data } = await client.auth.getSession();
+      render(data.session);
+      showStatus("Профиль PARLADOR обновлён.");
+    } catch (err) {
+      console.error("PARLADOR profile update:", err);
+      showStatus("Не удалось сохранить профиль. Попробуй ещё раз.");
+    } finally { editSave.disabled = false; }
   });
   avatarInput.addEventListener("change", async () => {
     const file = avatarInput.files?.[0];
