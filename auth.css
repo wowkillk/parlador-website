@@ -75,3 +75,6 @@
 .member-verified[hidden]{display:none}
 .member-verified svg{display:block;width:25px;height:25px}
 @media(max-width:420px){.member-name-row{gap:5px}.member-verified svg{width:21px;height:21px}}
+
+.auth-community-link{display:block;background:#ec263b;color:#fff!important;text-decoration:none;padding:15px 12px;text-align:center;margin:14px 0;font:700 11px/1.5 Arial,sans-serif;letter-spacing:.04em}
+.auth-community-link:hover,.auth-community-link:focus-visible{background:#c51428}
