@@ -4,5 +4,5 @@ window.PARLADOR_AUTH_CONFIG = Object.freeze({
   url: "https://feesigkukeameucnoyfz.supabase.co",
   publishableKey: "sb_publishable_4ODVSKckRH60zw36uE3d9Q_CePLf6xh",
   // Set true ONLY after enabling each provider in Supabase Auth dashboard.
-  providers: { google: true, email: true, telegram: false },
+  providers: { google: true, email: true, telegram: true },
 });
