@@ -85,7 +85,19 @@
       document.getElementById("badges").replaceChildren();
       const marker = document.createElement("div");
       marker.className = "badge-item";
-      marker.textContent = verifiedFounder ? "FOUNDER VERIFIED" : founderNumber ? "FOUNDER ID / без подтверждённой галочки" : "NO BADGES YET";
+      if (verifiedFounder) {
+        const original = document.querySelector("[data-founder-badge]");
+        if (original) {
+          const visual = original.cloneNode(true);
+          visual.removeAttribute("data-founder-badge");
+          visual.removeAttribute("hidden");
+          visual.setAttribute("aria-label", "Founder verified");
+          marker.appendChild(visual);
+        }
+      }
+      const badgeLabel = document.createElement("span");
+      badgeLabel.textContent = verifiedFounder ? "FOUNDER VERIFIED" : founderNumber ? "FOUNDER ID / без подтверждённой галочки" : "NO BADGES YET";
+      marker.appendChild(badgeLabel);
       document.getElementById("badges").appendChild(marker);
       document.querySelectorAll("[data-copy]").forEach(button => {
         button.onclick = async () => {
