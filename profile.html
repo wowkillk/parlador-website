@@ -77,6 +77,12 @@ footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11p
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 [hidden]{display:none!important}
 .auth-panel{border:1px solid #434343;background:#101010;padding:20px;margin:15px 0 22px}.auth-panel h2{font-size:17px;margin:0 0 12px}.auth-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.auth-actions form{display:flex;gap:8px;flex-wrap:wrap}.auth-actions input{min-width:220px;background:#050505;color:white;border:1px solid #666;padding:11px 13px;font:inherit}.auth-actions button{background:#ec000b;border:1px solid #ec000b;color:white;padding:11px 17px;font-weight:bold}.auth-actions #google-login{background:#fff;color:#050505;border-color:#fff}.auth-actions #sign-out{background:transparent;color:#fff;border:1px solid #777}.auth-panel p{font-size:12px;color:#bdbdbd;line-height:1.6}.auth-panel #auth-status{margin:12px 0;color:#fff}
+.avatar img{height:100%;width:100%;object-fit:cover;display:block}
+.avatar-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px;margin-bottom:16px}
+.avatar-controls label{display:inline-flex;align-items:center;border:1px solid #ec000b;background:#ec000b;color:#fff;padding:11px 15px;font-size:12px;font-weight:800;letter-spacing:.05em;cursor:pointer}
+.avatar-controls label:focus-within{outline:2px solid #fff;outline-offset:3px}
+.avatar-controls input{width:1px;height:1px;position:absolute;opacity:0}
+.avatar-controls small{color:#bbb;line-height:1.5}
 </style>
 </head>
 <body>
@@ -84,6 +90,10 @@ footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11p
 <main class="container">
 <section class="hero"><div class="eyebrow">06 / COMMUNITY IDENTITY</div><h1>DIGITAL<br>IDENTITY<span>.</span></h1><p>У каждого участника PARLADOR свой номер и история. Специальный бейдж основателя существует только у подтверждённого аккаунта.</p></section>
 <section class="auth-panel" aria-labelledby="auth-title"><h2 id="auth-title">COMMUNITY ACCESS / SUPABASE</h2><div class="auth-actions"><form id="email-login"><label for="auth-email" class="label">EMAIL LOGIN</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@example.com"><button type="submit">SEND MAGIC LINK</button></form><button type="button" id="google-login">CONTINUE WITH GOOGLE</button><button type="button" id="sign-out" hidden>SIGN OUT</button></div><p id="auth-status" role="status" aria-live="polite">Подключаем авторизацию…</p><p>Telegram-вход через существующего бота ещё не подключён к этой странице. Он не заменяется и новые аккаунты автоматически не объединяются. Для email/Google укажите этот адрес страницы в разрешённых Redirect URLs Supabase Auth.</p></section><p id="profile-mode" class="eyebrow">DESIGN PREVIEW / Не реальные данные аккаунта</p><div class="switcher" role="group" aria-label="Демонстрация типа профиля"><button type="button" data-person="founder" aria-pressed="true">FOUNDER / PLDR-001</button><button type="button" data-person="member" aria-pressed="false">COMMUNITY MEMBER</button></div>
+<div class="avatar-controls" id="avatar-controls" hidden>
+<label>UPLOAD AVATAR <input id="avatar-upload" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Загрузить фотографию профиля"></label>
+<small id="avatar-status" role="status" aria-live="polite">JPG, PNG или WebP, максимум 5 МБ.</small>
+</div>
 <div class="grid" id="profile-grid">
 <section class="card" aria-labelledby="passport-title"><h2 class="card-title" id="passport-title">01 / DIGITAL PASSPORT</h2>
 <div class="passport">
@@ -136,5 +146,5 @@ if(new URLSearchParams(location.search).get("type")==="member")selected="member"
 render();
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script defer src="profile-auth.js?v=9"></script>
+<script defer src="profile-auth.js?v=11"></script>
 </body></html>
