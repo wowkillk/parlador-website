@@ -21,15 +21,15 @@
   let avatarPreviewUrl = null;
   function setAvatar(src) {
     const host = document.getElementById("small-avatar");
-    const existing = host.querySelector("img");
-    if (existing) existing.remove();
-    if (src) {
-      const img = document.createElement("img");
-      img.alt = "Аватар профиля";
-      img.src = src;
-      img.onerror = () => { img.remove(); };
-      host.appendChild(img);
-    }
+    host.querySelector("img")?.remove();
+    host.classList.remove("has-photo");
+    if (!src) return;
+    const img = document.createElement("img");
+    img.alt = "Аватар профиля";
+    img.onload = () => { if (img.isConnected) host.classList.add("has-photo"); };
+    img.onerror = () => { img.remove(); host.classList.remove("has-photo"); };
+    img.src = src;
+    host.appendChild(img);
   }
   async function loadAvatar(uid, path) {
     if (!path || !path.startsWith(uid + "/")) return;
