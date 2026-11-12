@@ -75,14 +75,16 @@ header nav a:hover,.red{color:var(--light-red)}
 footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11px;letter-spacing:.18em}
 @media(max-width:760px){.container{padding:0 18px}header{min-height:65px}header nav{gap:13px;font-size:10px}.hero{padding:38px 0 15px}.grid{grid-template-columns:1fr;gap:16px}.card-title{padding:16px}.passport,.details{padding:18px}.cover{height:125px}.avatar{width:65px;height:65px}.passport h2{font-size:21px}.event{padding:12px}.event-icon{width:55px;height:60px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+[hidden]{display:none!important}
+.auth-panel{border:1px solid #434343;background:#101010;padding:20px;margin:15px 0 22px}.auth-panel h2{font-size:17px;margin:0 0 12px}.auth-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.auth-actions form{display:flex;gap:8px;flex-wrap:wrap}.auth-actions input{min-width:220px;background:#050505;color:white;border:1px solid #666;padding:11px 13px;font:inherit}.auth-actions button{background:#ec000b;border:1px solid #ec000b;color:white;padding:11px 17px;font-weight:bold}.auth-actions #google-login{background:#fff;color:#050505;border-color:#fff}.auth-actions #sign-out{background:transparent;color:#fff;border:1px solid #777}.auth-panel p{font-size:12px;color:#bdbdbd;line-height:1.6}.auth-panel #auth-status{margin:12px 0;color:#fff}
 </style>
 </head>
 <body>
 <header class="container"><a class="brand" href="index.html" aria-label="PARLADOR — главная">PARLADOR<i></i></a><nav aria-label="Навигация"><a href="index.html">HOME</a><a href="index.html#community">COMMUNITY</a></nav></header>
 <main class="container">
 <section class="hero"><div class="eyebrow">06 / COMMUNITY IDENTITY</div><h1>DIGITAL<br>IDENTITY<span>.</span></h1><p>У каждого участника PARLADOR свой номер и история. Специальный бейдж основателя существует только у подтверждённого аккаунта.</p></section>
-<div class="switcher" role="group" aria-label="Демонстрация типа профиля"><button type="button" data-person="founder" aria-pressed="true">FOUNDER / PLDR-001</button><button type="button" data-person="member" aria-pressed="false">COMMUNITY MEMBER</button></div>
-<div class="grid">
+<section class="auth-panel" aria-labelledby="auth-title"><h2 id="auth-title">COMMUNITY ACCESS / SUPABASE</h2><div class="auth-actions"><form id="email-login"><label for="auth-email" class="label">EMAIL LOGIN</label><input id="auth-email" type="email" autocomplete="email" required placeholder="you@example.com"><button type="submit">SEND MAGIC LINK</button></form><button type="button" id="google-login">CONTINUE WITH GOOGLE</button><button type="button" id="sign-out" hidden>SIGN OUT</button></div><p id="auth-status" role="status" aria-live="polite">Подключаем авторизацию…</p><p>Telegram-вход через существующего бота ещё не подключён к этой странице. Он не заменяется и новые аккаунты автоматически не объединяются. Для email/Google укажите этот адрес страницы в разрешённых Redirect URLs Supabase Auth.</p></section><p id="profile-mode" class="eyebrow">DESIGN PREVIEW / Не реальные данные аккаунта</p><div class="switcher" role="group" aria-label="Демонстрация типа профиля"><button type="button" data-person="founder" aria-pressed="true">FOUNDER / PLDR-001</button><button type="button" data-person="member" aria-pressed="false">COMMUNITY MEMBER</button></div>
+<div class="grid" id="profile-grid">
 <section class="card" aria-labelledby="passport-title"><h2 class="card-title" id="passport-title">01 / DIGITAL PASSPORT</h2>
 <div class="passport">
  <div class="passport-head"><div class="avatar founder" id="small-avatar" aria-hidden="true">?</div><div><h2><span data-name>DJ KALASHNIKOV</span><span class="identity-badge" data-founder-badge aria-label="Founder verified"><svg viewBox="0 0 48 50" focusable="false" aria-hidden="true"><path d="M24 2 L44 13.5 L44 36.5 L24 48 L4 36.5 L4 13.5 Z" fill="#fff" stroke="#ec000b" stroke-width="3" stroke-linejoin="round"/><text x="24" y="36" font-family="Arial Black, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#050505">?</text></svg></span></h2><div class="handle" data-handle>@KALASHNIKOV</div><div class="role" data-role>FOUNDER VERIFIED</div></div></div>
@@ -101,7 +103,7 @@ footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11p
 <h3 class="section-title">LINKS</h3><div class="links"><a href="index.html#community">PARLADOR COMMUNITY ↗</a></div>
 </div></section>
 </div>
-<p class="note">Демонстрация дизайна. Переключатель показывает два заранее заданных примера, а не реальные аккаунты. ID и Founder Verified нельзя безопасно назначать браузерным JavaScript: для регистрации, редактирования, подтверждения прав и истории посещений потребуется серверная система.</p>
+<p class="note">В режиме предпросмотра показаны вымышленные данные. После входа страница читает только ваш профиль из member_profiles. Статус VERIFIED не выводится из клиентского кода: его проверка хранится отдельно. История мероприятий и редактирование ещё не подключены.</p>
 </main><footer class="container">PARLADOR © 2026 / IDENTITY SYSTEM / DESIGN PREVIEW</footer>
 <script>
 "use strict";
@@ -133,4 +135,6 @@ document.querySelectorAll("[data-copy]").forEach(el=>el.addEventListener("click"
 if(new URLSearchParams(location.search).get("type")==="member")selected="member";
 render();
 </script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="profile-auth.js"></script>
 </body></html>
