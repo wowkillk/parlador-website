@@ -26,3 +26,5 @@
 .social-link{display:inline-block;padding:12px;border:1px solid #777;text-decoration:none;font-weight:800;letter-spacing:.07em;font-size:11px}
 .social-link:hover,.social-link:focus-visible{border-color:#f04857;color:#ff6470}
 @media(max-width:500px){.avatar-editor{flex-direction:column}.person-header{gap:10px}.community-avatar{width:64px;height:64px}.community-verified{width:20px;height:20px}}
+
+.avatar-transfer-status:not(:empty){background:#361218;border-left:3px solid #ff4650;padding:13px;color:#fff;font-weight:700}
