@@ -77,7 +77,7 @@ footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11p
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 [hidden]{display:none!important}
 .auth-panel{border:1px solid #434343;background:#101010;padding:20px;margin:15px 0 22px}.auth-panel h2{font-size:17px;margin:0 0 12px}.auth-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.auth-actions form{display:flex;gap:8px;flex-wrap:wrap}.auth-actions input{min-width:220px;background:#050505;color:white;border:1px solid #666;padding:11px 13px;font:inherit}.auth-actions button{background:#ec000b;border:1px solid #ec000b;color:white;padding:11px 17px;font-weight:bold}.auth-actions #google-login{background:#fff;color:#050505;border-color:#fff}.auth-actions #sign-out{background:transparent;color:#fff;border:1px solid #777}.auth-panel p{font-size:12px;color:#bdbdbd;line-height:1.6}.auth-panel #auth-status{margin:12px 0;color:#fff}
-.avatar img{height:100%;width:100%;object-fit:cover;display:block}
+.avatar{position:relative;overflow:hidden;min-width:0;min-height:0}.avatar.has-photo{font-size:0}.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .avatar-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px;margin-bottom:16px}
 .avatar-controls label{display:inline-flex;align-items:center;border:1px solid #ec000b;background:#ec000b;color:#fff;padding:11px 15px;font-size:12px;font-weight:800;letter-spacing:.05em;cursor:pointer}
 .avatar-controls label:focus-within{outline:2px solid #fff;outline-offset:3px}
@@ -146,5 +146,5 @@ if(new URLSearchParams(location.search).get("type")==="member")selected="member"
 render();
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script defer src="profile-auth.js?v=11"></script>
+<script defer src="profile-auth.js?v=12"></script>
 </body></html>
