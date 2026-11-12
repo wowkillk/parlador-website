@@ -37,8 +37,8 @@ header nav a:hover,.red{color:var(--light-red)}
 .avatar.founder{border-color:var(--red)}
 .passport h2{font-size:clamp(19px,3vw,29px);letter-spacing:-.04em;margin:0 0 5px}
 .handle{color:#aaa;font-size:13px}
-.identity-badge{width:30px;height:34px;flex:0 0 auto;display:inline-grid;place-items:center;background:var(--red);clip-path:polygon(50% 0,95% 23%,95% 77%,50% 100%,5% 77%,5% 23%);vertical-align:middle;margin-left:5px}
-.identity-badge>span{width:25px;height:29px;display:grid;place-items:center;background:white;color:#050505;font-weight:900;font-size:20px;clip-path:polygon(50% 0,95% 23%,95% 77%,50% 100%,5% 77%,5% 23%)}
+.identity-badge{width:36px;height:38px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-left:7px;line-height:0}
+.identity-badge svg{display:block;width:100%;height:100%;overflow:visible}
 .role{color:var(--light-red);font-size:12px;letter-spacing:.09em;font-weight:bold;margin-top:7px}
 .rule{height:1px;background:#363636;margin:25px 0}
 .identity-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -85,19 +85,19 @@ footer{padding:28px 0 36px;border-top:1px solid #292929;color:#888;font-size:11p
 <div class="grid">
 <section class="card" aria-labelledby="passport-title"><h2 class="card-title" id="passport-title">01 / DIGITAL PASSPORT</h2>
 <div class="passport">
- <div class="passport-head"><div class="avatar founder" id="small-avatar" aria-hidden="true">?</div><div><h2><span data-name>DJ KALASHNIKOV</span><span class="identity-badge" data-founder-badge aria-label="Founder verified"><span>?</span></span></h2><div class="handle" data-handle>@KALASHNIKOV</div><div class="role" data-role>FOUNDER VERIFIED</div></div></div>
+ <div class="passport-head"><div class="avatar founder" id="small-avatar" aria-hidden="true">?</div><div><h2><span data-name>DJ KALASHNIKOV</span><span class="identity-badge" data-founder-badge aria-label="Founder verified"><svg viewBox="0 0 48 50" focusable="false" aria-hidden="true"><path d="M24 2 L44 13.5 L44 36.5 L24 48 L4 36.5 L4 13.5 Z" fill="#fff" stroke="#ec000b" stroke-width="3" stroke-linejoin="round"/><text x="24" y="36" font-family="Arial Black, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#050505">?</text></svg></span></h2><div class="handle" data-handle>@KALASHNIKOV</div><div class="role" data-role>FOUNDER VERIFIED</div></div></div>
  <div class="rule"></div><div class="identity-row"><div><div class="label">MEMBER ID</div><div class="code" data-id>PLDR-001</div></div><button type="button" class="simple-btn" data-copy>COPY ID</button></div>
 </div></section>
 <section class="card profile" aria-labelledby="profile-title"><h2 class="card-title" id="profile-title">02 / FULL PROFILE</h2>
 <div class="cover"><p>PARLADOR / UNDERGROUND ONLY</p></div>
 <div class="details">
-<div class="big-id"><div><h2><span data-name>DJ KALASHNIKOV</span><span class="identity-badge" data-founder-badge aria-label="Founder verified"><span>?</span></span></h2><div class="handle" data-handle>@KALASHNIKOV</div><div class="role" data-role>FOUNDER VERIFIED</div></div></div>
+<div class="big-id"><div><h2><span data-name>DJ KALASHNIKOV</span><span class="identity-badge" data-founder-badge aria-label="Founder verified"><svg viewBox="0 0 48 50" focusable="false" aria-hidden="true"><path d="M24 2 L44 13.5 L44 36.5 L24 48 L4 36.5 L4 13.5 Z" fill="#fff" stroke="#ec000b" stroke-width="3" stroke-linejoin="round"/><text x="24" y="36" font-family="Arial Black, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#050505">?</text></svg></span></h2><div class="handle" data-handle>@KALASHNIKOV</div><div class="role" data-role>FOUNDER VERIFIED</div></div></div>
 <p class="bio" data-bio>DJ / CO-FOUNDER OF PARLADOR. RAW TECHNO. UNDERGROUND CULTURE. MOSCOW.</p>
 <div class="triple"><div><strong data-events>—</strong><small>EVENTS</small></div><div><strong data-access>CORE</strong><small>ACCESS</small></div><div><strong>2026</strong><small>JOINED</small></div></div>
 <h3 class="section-title">EVENT HISTORY</h3>
 <div class="event"><div class="event-icon">P.</div><div><strong>PARLADOR / 19.12.2026</strong><small>FABULA, MOSCOW</small><small class="upcoming">UPCOMING / Не считается посещением</small></div></div>
 <h3 class="section-title">BADGES</h3>
-<div class="badges" id="badges"><div class="badge-item"><span class="identity-badge" aria-hidden="true"><span>?</span></span><span>FOUNDER</span></div><div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>EVENT 01 / LOCKED</span></div></div>
+<div class="badges" id="badges"><div class="badge-item"><span class="identity-badge" aria-hidden="true"><svg viewBox="0 0 48 50" focusable="false" aria-hidden="true"><path d="M24 2 L44 13.5 L44 36.5 L24 48 L4 36.5 L4 13.5 Z" fill="#fff" stroke="#ec000b" stroke-width="3" stroke-linejoin="round"/><text x="24" y="36" font-family="Arial Black, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#050505">?</text></svg></span><span>FOUNDER</span></div><div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>EVENT 01 / LOCKED</span></div></div>
 <h3 class="section-title">LINKS</h3><div class="links"><a href="index.html#community">PARLADOR COMMUNITY ↗</a></div>
 </div></section>
 </div>
@@ -122,7 +122,7 @@ function render(){
  document.querySelectorAll("[data-founder-badge]").forEach(el=>el.classList.toggle("hidden",!founder));
  document.getElementById("small-avatar").classList.toggle("founder",founder);
  document.getElementById("small-avatar").textContent=founder?"?":"P";
- document.getElementById("badges").innerHTML=founder?'<div class="badge-item"><span class="identity-badge" aria-hidden="true"><span>?</span></span><span>FOUNDER</span></div><div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>EVENT 01 / LOCKED</span></div>':'<div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>NO BADGES YET</span></div>';
+ document.getElementById("badges").innerHTML=founder?'<div class="badge-item"><span class="identity-badge" aria-hidden="true"><svg viewBox="0 0 48 50" focusable="false" aria-hidden="true"><path d="M24 2 L44 13.5 L44 36.5 L24 48 L4 36.5 L4 13.5 Z" fill="#fff" stroke="#ec000b" stroke-width="3" stroke-linejoin="round"/><text x="24" y="36" font-family="Arial Black, Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#050505">?</text></svg></span><span>FOUNDER</span></div><div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>EVENT 01 / LOCKED</span></div>':'<div class="badge-item"><div style="font-size:25px;margin-bottom:9px">⌁</div><span>NO BADGES YET</span></div>';
  document.querySelectorAll("[data-person]").forEach(el=>el.setAttribute("aria-pressed",String(el.dataset.person===selected)));
  document.querySelectorAll("[data-copy]").forEach(el=>el.textContent="COPY ID");
 }
