@@ -58,13 +58,22 @@
       }
       const number = Number(data.member_number);
       const founderNumber = number === 1;
+      // Server-side no-argument RPC checks only this session's Founder status.
+      // Fail closed: missing/unavailable RPC never grants a badge.
+      let verifiedFounder = false;
+      let verificationPending = false;
+      if (founderNumber) {
+        const check = await client.rpc("is_current_user_verified_founder");
+        if (check.error) verificationPending = true;
+        else verifiedFounder = check.data === true;
+      }
       const code = Number.isSafeInteger(number) && number > 0
         ? founderNumber ? "PLDR-001" : "P-" + String(number).padStart(6, "0")
         : "ID NOT SET";
       setFields("[data-name]", data.display_name || data.nickname || "PARLADOR MEMBER");
       setFields("[data-handle]", data.nickname ? "@" + data.nickname.replace(/^@/, "") : "@member");
       setFields("[data-id]", code);
-      setFields("[data-role]", founderNumber ? "FOUNDER / ПОДТВЕРЖДЕНИЕ ВЕРИФИКАЦИИ ОТДЕЛЬНО" : "COMMUNITY MEMBER");
+      setFields("[data-role]", verifiedFounder ? "FOUNDER VERIFIED" : founderNumber ? "FOUNDER / ВЕРИФИКАЦИЯ НЕ ПОДТВЕРЖДЕНА" : "COMMUNITY MEMBER");
       setFields("[data-bio]", data.bio || "PARLADOR COMMUNITY");
       setFields("[data-access]", founderNumber ? "CORE" : "MEMBER");
       setFields("[data-events]", "—");
@@ -72,11 +81,23 @@
       document.getElementById("small-avatar").classList.toggle("founder", founderNumber);
       // Founder verification lives in the private member_verifications table.
       // Do not infer verified status from user-controlled text or a client flag.
-      document.querySelectorAll("[data-founder-badge]").forEach(el => { el.hidden = true; });
+      document.querySelectorAll("[data-founder-badge]").forEach(el => { el.hidden = !verifiedFounder; });
       document.getElementById("badges").replaceChildren();
       const marker = document.createElement("div");
       marker.className = "badge-item";
-      marker.textContent = founderNumber ? "FOUNDER ID / верификация пока не загружена" : "NO BADGES YET";
+      if (verifiedFounder) {
+        const original = document.querySelector("[data-founder-badge]");
+        if (original) {
+          const visual = original.cloneNode(true);
+          visual.removeAttribute("data-founder-badge");
+          visual.removeAttribute("hidden");
+          visual.setAttribute("aria-label", "Founder verified");
+          marker.appendChild(visual);
+        }
+      }
+      const badgeLabel = document.createElement("span");
+      badgeLabel.textContent = verifiedFounder ? "FOUNDER VERIFIED" : founderNumber ? "FOUNDER ID / без подтверждённой галочки" : "NO BADGES YET";
+      marker.appendChild(badgeLabel);
       document.getElementById("badges").appendChild(marker);
       document.querySelectorAll("[data-copy]").forEach(button => {
         button.onclick = async () => {
@@ -86,7 +107,7 @@
       });
       profileGrid.hidden = false;
       heading.textContent = "LIVE PROFILE / " + code;
-      setStatus("Данные получены из вашего профиля в Supabase. Знак VERIFIED пока не отображается, поскольку проверка хранится отдельно.");
+      setStatus(verifiedFounder ? "Профиль и подтверждённый Founder-бейдж загружены из Supabase." : verificationPending ? "Профиль загружен, но серверная проверка бейджа пока недоступна. Убедитесь, что RPC создана и открыта для Data API." : "Профиль загружен из Supabase. Подтверждённого Founder-бейджа у этой сессии нет.");
     } catch (error) {
       heading.textContent = "НЕ УДАЛОСЬ ЗАГРУЗИТЬ ПРОФИЛЬ";
       setStatus("Ошибка чтения member_profiles: " + (error?.message || "проверьте Data API и RLS") + ". Данные не изменены.");
