@@ -12,6 +12,31 @@
   const profileGrid = document.getElementById("profile-grid");
   const heading = document.getElementById("profile-mode");
   const setStatus = (message) => { status.textContent = message; };
+  const avatarControls = document.getElementById("avatar-controls");
+  const avatarInput = document.getElementById("avatar-upload");
+  const avatarStatus = document.getElementById("avatar-status");
+  const AVATAR_BUCKET = "community-avatars";
+  let activeUserId = null;
+  let currentAvatarPath = null;
+  let avatarPreviewUrl = null;
+  function setAvatar(src) {
+    const host = document.getElementById("small-avatar");
+    const existing = host.querySelector("img");
+    if (existing) existing.remove();
+    if (src) {
+      const img = document.createElement("img");
+      img.alt = "Аватар профиля";
+      img.src = src;
+      img.onerror = () => { img.remove(); };
+      host.appendChild(img);
+    }
+  }
+  async function loadAvatar(uid, path) {
+    if (!path || !path.startsWith(uid + "/")) return;
+    const { data, error } = await client.storage.from(AVATAR_BUCKET).createSignedUrl(path, 3600);
+    if (!error && data?.signedUrl && activeUserId === uid) setAvatar(data.signedUrl);
+  }
+
 
   if (!window.supabase?.createClient) {
     setStatus("Не удалось загрузить модуль авторизации. Проверь соединение и обнови страницу.");
@@ -28,6 +53,10 @@
 
   async function showSession(session) {
     if (!session?.user?.id) {
+      activeUserId = null;
+      currentAvatarPath = null;
+      avatarControls.hidden = true;
+      setAvatar(null);
       logout.hidden = true;
       form.hidden = false;
       google.hidden = false;
@@ -39,6 +68,9 @@
       return;
     }
     const uid = session.user.id;
+    activeUserId = uid;
+    avatarControls.hidden = true;
+    setAvatar(null);
     logout.hidden = false;
     form.hidden = true;
     google.hidden = true;
@@ -48,7 +80,7 @@
     setStatus("Сессия подтверждена. Читаем только ваш профиль.");
     try {
       const { data, error } = await client.from("member_profiles")
-        .select("user_id,display_name,nickname,bio,member_number")
+        .select("user_id,display_name,nickname,bio,member_number,avatar_path")
         .eq("user_id", uid).maybeSingle();
       if (error) throw error;
       if (!data || data.user_id !== uid) {
@@ -56,6 +88,7 @@
         setStatus("Вы вошли, но запись member_profiles для этого аккаунта не найдена. Мы ничего не создавали и не меняли.");
         return;
       }
+      currentAvatarPath = data.avatar_path || null;
       const number = Number(data.member_number);
       const founderNumber = number === 1;
       // Server-side no-argument RPC checks only this session's Founder status.
@@ -106,6 +139,9 @@
         };
       });
       profileGrid.hidden = false;
+      avatarControls.hidden = false;
+      avatarStatus.textContent = "JPG, PNG или WebP, максимум 5 МБ.";
+      await loadAvatar(uid, currentAvatarPath);
       heading.textContent = "LIVE PROFILE / " + code;
       setStatus(verifiedFounder ? "Профиль и подтверждённый Founder-бейдж загружены из Supabase." : verificationPending ? "Профиль загружен, но серверная проверка бейджа пока недоступна. Убедитесь, что RPC создана и открыта для Data API." : "Профиль загружен из Supabase. Подтверждённого Founder-бейджа у этой сессии нет.");
     } catch (error) {
@@ -113,6 +149,43 @@
       setStatus("Ошибка чтения member_profiles: " + (error?.message || "проверьте Data API и RLS") + ". Данные не изменены.");
     }
   }
+
+
+  avatarInput.addEventListener("change", async () => {
+    const file = avatarInput.files?.[0];
+    if (!file) return;
+    const uid = activeUserId;
+    const allowed = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+    if (!uid || !allowed[file.type] || file.size > 5 * 1024 * 1024 || file.size === 0) {
+      avatarStatus.textContent = "Нужен JPG, PNG или WebP размером до 5 МБ.";
+      avatarInput.value = "";
+      return;
+    }
+    avatarInput.disabled = true;
+    avatarStatus.textContent = "Загружаем фотографию…";
+    // A fresh immutable path avoids overwriting or deleting an existing image.
+    const path = uid + "/" + crypto.randomUUID() + "." + allowed[file.type];
+    try {
+      const { data: userData, error: userError } = await client.auth.getUser();
+      if (userError || userData?.user?.id !== uid) throw new Error("Сессия изменилась. Войди заново.");
+      const { error: uploadError } = await client.storage.from(AVATAR_BUCKET)
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (uploadError) throw uploadError;
+      const { error: profileError } = await client.from("member_profiles")
+        .update({ avatar_path: path })
+        .eq("user_id", uid);
+      if (profileError) throw profileError;
+      if (activeUserId !== uid) return;
+      currentAvatarPath = path;
+      await loadAvatar(uid, path);
+      avatarStatus.textContent = "Аватар обновлён!";
+    } catch (err) {
+      avatarStatus.textContent = "Ошибка: " + (err?.message || "не удалось загрузить аватар");
+    } finally {
+      avatarInput.disabled = false;
+      avatarInput.value = "";
+    }
+  });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
