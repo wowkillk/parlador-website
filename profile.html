@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#080808">
+<title>PARLADOR / MEMBER PROFILE</title>
+<link rel="stylesheet" href="members.css">
+<link rel="stylesheet" href="profile.css">
+<script src="auth-config.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+<script src="community-ui.js" defer></script>
+<script src="profile.js" defer></script>
+</head>
+<body>
+<header class="bar"><a href="./">PARLADOR<span>.</span></a><span>MEMBER / PROFILE</span><a href="members.html">← COMMUNITY</a></header>
+<main class="profile-main">
+<p class="eyebrow">● PARLADOR / MEMBERS ONLY</p>
+<h1>MEMBER<span>.</span></h1>
+<p id="loading" role="status">Проверяем доступ…</p>
+<section id="guest" hidden><p>Профили доступны только авторизованным участникам PARLADOR.</p><a class="action" href="./">ВОЙТИ НА САЙТЕ</a></section>
+<section id="missing" hidden><p>Профиль не найден или участник скрыл его.</p><a class="action" href="members.html">К УЧАСТНИКАМ</a></section>
+<article id="profile-card" hidden class="profile-card">
+  <p class="eyebrow">01 / COMMUNITY IDENTITY</p>
+  <div class="profile-heading">
+    <div id="profile-avatar" class="profile-mark" aria-hidden="true">P.</div>
+    <div><div class="identity-heading"><h2 id="profile-name"></h2><span id="profile-verified-holder"></span></div><p id="profile-nickname" class="nick" hidden></p><p id="profile-id" class="member-id"></p></div>
+  </div>
+  <section class="profile-section"><p class="eyebrow">02 / ABOUT</p><p id="profile-bio"></p></section>
+  <section class="profile-section"><p class="eyebrow">03 / CONNECTIONS</p><div id="social-links" class="social-links"></div><p id="no-socials" class="hint">Участник пока не добавил социальные сети.</p></section>
+  <section class="profile-section"><p class="eyebrow">04 / ACTIVITY</p><p class="hint">История событий и активность PARLADOR появятся позже.</p></section>
+  <a class="action" href="members.html">← ВСЕ УЧАСТНИКИ</a>
+</article>
+</main>
+<footer>PARLADOR / ONE COMMUNITY / NO COMPROMISE</footer>
+</body>
+</html>
