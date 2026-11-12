@@ -110,16 +110,42 @@
     if(file)await uploadPhoto(file);
     event.target.value="";
   });
-  $("reuse-private-avatar").addEventListener("click",async()=>{
-    if(!activeId || !activeUser)return;
-    const path=activeUser.user_metadata?.parlador_avatar_path;
-    if(typeof path!=="string" || !path.startsWith(activeId+"/")){say("В личном аккаунте пока нет загруженной фотографии.");return;}
-    if(!window.confirm("Скопировать личную аватарку в фото сообщества? После публикации профиля её смогут видеть авторизованные участники."))return;
+  const reuseButton=$("reuse-private-avatar");
+  const reuseHint=$("avatar-transfer-status");
+  function transferStatus(text){reuseHint.textContent=text;say(text);}
+  reuseButton.addEventListener("click",async()=>{
+    if(!client||!activeId){transferStatus("Сначала войди в аккаунт PARLADOR.");return;}
+    reuseButton.disabled=true;
     const uid=activeId;
-    const {data,error}=await client.storage.from("member-avatars").download(path);
-    if(error||!data){say("Не удалось получить личную аватарку.");return;}
-    if(activeId!==uid)return;
-    await uploadPhoto(new File([data],"avatar."+((data.type||"image/jpeg").split("/")[1]),{type:data.type||"image/jpeg"}));
+    transferStatus("Проверяем фотографию в личном аккаунте…");
+    try{
+      // Read fresh account metadata, not a potentially stale OAuth session snapshot.
+      const {data:auth,error:authError}=await client.auth.getUser();
+      if(authError||auth.user?.id!==uid)throw Error("Сессия изменилась. Войди снова.");
+      const path=auth.user.user_metadata?.parlador_avatar_path;
+      if(typeof path!=="string"||!path.startsWith(uid+"/")){
+        transferStatus("В личном аккаунте нет загруженного фото. Загрузи его через MY ACCOUNT или выбери файл ниже.");
+        return;
+      }
+      const extension=path.split(".").pop()?.toLowerCase();
+      const formats={jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png",webp:"image/webp"};
+      const mime=formats[extension];
+      if(!mime){transferStatus("Формат личного фото не поддерживается. Выбери JPG, PNG или WEBP.");return;}
+      if(!window.confirm("Перенести личную фотографию в профиль сообщества? Её увидят авторизованные участники, только когда ты опубликуешь профиль.")){
+        transferStatus("Перенос отменён.");return;
+      }
+      transferStatus("Копируем фото из личного аккаунта…");
+      const {data,error}=await client.storage.from("member-avatars").download(path);
+      if(error||!data)throw Error("Не удалось прочитать личную аватарку в Storage.");
+      if(activeId!==uid)return;
+      // Storage downloads can have application/octet-stream; original path supplies MIME.
+      const file=new File([data],"community-avatar."+extension,{type:mime});
+      await uploadPhoto(file);
+      reuseHint.textContent=feedback.textContent;
+    }catch(error){
+      console.error("PARLADOR avatar transfer",error);
+      transferStatus("Не получилось перенести фото: "+(error?.message||"ошибка загрузки")+". Можно выбрать фото вручную.");
+    }finally{reuseButton.disabled=false;}
   });
   function validSocials(){
     const instagram=$("instagram").value.trim().replace(/^@/,"");
